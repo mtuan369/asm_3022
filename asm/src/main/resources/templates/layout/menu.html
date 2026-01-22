@@ -1,0 +1,87 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-warning" href="/">
+                <i class="fas fa-store"></i> J5 SHOP
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarScroll">
+                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/about">
+                            <i class="fas fa-info-circle"></i> Giới thiệu
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" th:if="${session.user != null and session.user.admin}">
+                        <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-shield"></i> Quản trị
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/admin/products/index">Quản lý Sản phẩm</a></li>
+                            <li><a class="dropdown-item" href="/admin/categories/index">Quản lý Loại hàng</a></li>
+                            <li><a class="dropdown-item" href="/admin/accounts/index">Quản lý Tài khoản</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders/index">Quản lý Đơn hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/admin/report/inventory">Báo cáo Tồn kho</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form action="/product/list" method="get" class="d-flex mx-auto my-2 my-lg-0" style="max-width: 400px; width: 100%;">
+                    <input class="form-control me-2" type="search" name="keywords"
+                           placeholder="Tìm kiếm sản phẩm..."
+                           th:value="${keywords}" aria-label="Search">
+                    <button class="btn btn-outline-warning" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-2">
+                        <a class="nav-link position-relative" href="/cart/view">
+                            <i class="fas fa-shopping-cart fa-lg"></i> Giỏ hàng
+                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </a>
+                    </li>
+
+                    <th:block th:if="${session.user == null}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth/login">Đăng nhập</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/account/sign-up">Đăng ký</a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${session.user != null}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <img th:src="@{|/images/${session.user.photo}|}"
+                                     onerror="this.src='/images/user.png'"
+                                     class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid white;">
+                                <span class="ms-1" th:text="${session.user.fullname}">User Name</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/account/edit-profile">Cập nhật tài khoản</a></li>
+                                <li><a class="dropdown-item" href="/account/change-password">Đổi mật khẩu</a></li>
+                                <li><a class="dropdown-item" href="/order/list">Lịch sử mua hàng</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="/auth/logoff">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,22 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card mx-auto" style="max-width: 500px;">
+            <div class="card-header bg-info text-white">ĐĂNG NHẬP</div>
+            <div class="card-body">
+                <div th:if="${message}" class="alert alert-warning" th:text="${message}"></div>
+                <form action="/auth/login" method="post">
+                    <div class="mb-3">
+                        <label>Username</label>
+                        <input name="username" class="form-control" value="user">
+                    </div>
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input name="password" type="password" class="form-control" value="123">
+                    </div>
+                    <button class="btn btn-primary">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

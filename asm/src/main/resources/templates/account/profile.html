@@ -1,0 +1,38 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card mx-auto" style="max-width: 600px;">
+            <div class="card-header bg-warning fw-bold">CẬP NHẬT HỒ SƠ</div>
+            <div class="card-body">
+                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                <form action="/account/edit-profile" method="post" enctype="multipart/form-data" th:object="${user}">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img th:src="@{|/images/*{photo}|}" class="img-thumbnail mb-2" style="max-width: 100%;">
+                            <input name="photo_file" type="file" class="form-control form-control-sm">
+                            <input th:field="*{photo}" type="hidden">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label>Username:</label>
+                                <input th:field="*{username}" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label>Họ tên:</label>
+                                <input th:field="*{fullname}" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Email:</label>
+                                <input th:field="*{email}" class="form-control">
+                            </div>
+                            <input th:field="*{password}" type="hidden">
+                            <input th:field="*{admin}" type="hidden">
+                            <input th:field="*{activated}" type="hidden">
+
+                            <button class="btn btn-primary mt-3">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

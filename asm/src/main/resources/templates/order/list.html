@@ -1,0 +1,29 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card">
+            <div class="card-header bg-info text-white">LỊCH SỬ ĐƠN HÀNG</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Mã ĐH</th>
+                        <th>Ngày đặt</th>
+                        <th>Địa chỉ</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="o : ${orders}">
+                        <td th:text="${o.id}"></td>
+                        <td th:text="${#dates.format(o.createDate, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${o.address}"></td>
+                        <td>
+                            <a th:href="@{|/order/detail/${o.id}|}" class="btn btn-sm btn-primary">Xem chi tiết</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

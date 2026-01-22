@@ -1,0 +1,30 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card">
+            <div class="card-header bg-secondary text-white">CHI TIẾT ĐƠN HÀNG #<span th:text="${order.id}"></span></div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="d : ${order.orderDetails}">
+                        <td th:text="${d.product.name}"></td>
+                        <td th:text="${d.price}"></td>
+                        <td th:text="${d.quantity}"></td>
+                        <td th:text="${d.price * d.quantity}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a href="/order/list" class="btn btn-outline-secondary">Quay lại danh sách</a>
+            </div>
+        </div>
+    </main>
+</div>

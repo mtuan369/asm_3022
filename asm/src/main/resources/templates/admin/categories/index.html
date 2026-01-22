@@ -1,0 +1,38 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">QUẢN LÝ LOẠI HÀNG</div>
+            <div class="card-body">
+                <form th:object="${item}" method="post">
+                    <div class="mb-3">
+                        <label>Mã loại</label>
+                        <input th:field="*{id}" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label>Tên loại</label>
+                        <input th:field="*{name}" class="form-control">
+                    </div>
+                    <button formaction="/admin/categories/create" class="btn btn-primary">Thêm</button>
+                    <button formaction="/admin/categories/update" class="btn btn-warning">Sửa</button>
+                    <a href="/admin/categories/index" class="btn btn-secondary">Làm mới</a>
+                </form>
+            </div>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="bg-light">
+            <tr><th>ID</th><th>Tên loại</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${items}">
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.name}"></td>
+                <td class="text-center">
+                    <a th:href="@{|/admin/categories/edit/${c.id}|}" class="btn btn-sm btn-info">Chọn</a>
+                    <a th:href="@{|/admin/categories/delete/${c.id}|}" class="btn btn-sm btn-danger">Xóa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>

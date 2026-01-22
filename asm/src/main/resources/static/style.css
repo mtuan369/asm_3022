@@ -1,0 +1,100 @@
+/* =========================================
+   MODERN THEME - J5 SHOP PRO
+   Author: Truong Minh Tuan
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #3E2723; /* Nâu đậm */
+    --accent-color: #BC6C25;  /* Cam đất */
+    --light-bg: #F9F7F2;      /* Kem nhạt */
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* NAVBAR */
+.navbar {
+    background: rgba(62, 39, 35, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+.navbar-brand { font-weight: 800; font-size: 1.5rem; color: #fff !important; text-transform: uppercase; letter-spacing: 1px; }
+.nav-link { color: #eee !important; font-weight: 500; transition: 0.3s; }
+.nav-link:hover { color: var(--accent-color) !important; }
+
+/* HERO CAROUSEL (SLIDER) */
+.carousel-item {
+    height: 400px;
+    background-color: #000;
+}
+.carousel-item img {
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7; /* Làm tối ảnh để chữ nổi hơn */
+}
+.carousel-caption {
+    bottom: 30%;
+    z-index: 10;
+}
+.carousel-caption h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.btn-hero {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s;
+}
+.btn-hero:hover { transform: scale(1.05); background: #a45a1b; color: #fff; }
+
+/* SERVICE FEATURES (Cam kết) */
+.feature-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: transform 0.3s;
+}
+.feature-box:hover { transform: translateY(-5px); }
+.feature-icon { font-size: 2rem; color: var(--accent-color); margin-bottom: 10px; }
+
+/* PRODUCT CARD */
+.card {
+    border: none;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+.card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+.card-header { background: #fff; border-bottom: 2px solid #f0f0f0; font-weight: 700; color: var(--primary-color); }
+.list-group-item { border: none; padding: 12px 20px; transition: 0.2s; }
+.list-group-item:hover { background-color: #FFF3E0; color: var(--accent-color); padding-left: 25px; }
+
+/* CHATBOT & FOOTER (Giữ nguyên style cũ của bạn) */
+.chat-btn { position: fixed !important; bottom: 30px !important; right: 30px !important; width: 60px; height: 60px; background: linear-gradient(135deg, #BC6C25, #D4A373); color: white; border-radius: 50%; text-align: center; line-height: 60px; font-size: 28px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 2147483647; animation: pulse-animation 2s infinite; }
+.chat-box { position: fixed !important; bottom: 100px !important; right: 30px !important; width: 350px; height: 450px; background: #fff; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); z-index: 2147483647; display: none; flex-direction: column; overflow: hidden; border: 1px solid #eee; }
+.chat-box.active { display: flex !important; }
+.chat-header { background: #3E2723; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+.chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #FDFBF7; }
+.chat-footer { padding: 10px; border-top: 1px solid #eee; display: flex; }
+.chat-input { flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 20px; outline: none; }
+.send-btn { background: none; border: none; color: #BC6C25; font-size: 20px; margin-left: 10px; cursor: pointer; }
+.message { margin-bottom: 10px; max-width: 80%; padding: 10px; border-radius: 10px; font-size: 14px; word-wrap: break-word; }
+.bot-message { background: #EFEBE9; color: #333; align-self: flex-start; border-bottom-left-radius: 0; }
+.user-message { background: #BC6C25; color: white; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 0; }
+@keyframes pulse-animation { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(188, 108, 37, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(188, 108, 37, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(188, 108, 37, 0); } }

@@ -1,0 +1,47 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card mt-3">
+            <div class="row g-0">
+                <div class="col-md-5 text-center p-3">
+                    <img th:src="@{|${item.image}|}" class="img-fluid rounded shadow-sm"
+                         alt="Product Image" style="max-height: 400px; object-fit: contain;">
+                </div>
+
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <h3 class="card-title fw-bold text-primary" th:text="${item.name}">Tên sản phẩm</h3>
+
+                        <div class="my-3">
+                            <span class="fs-4 text-danger fw-bold" th:text="${#numbers.formatCurrency(item.price)}">$999.00</span>
+                        </div>
+
+                        <ul class="list-unstyled">
+                            <li><strong>Mã sản phẩm:</strong> <span th:text="${item.id}"></span></li>
+                            <li><strong>Loại hàng:</strong> <span th:text="${item.category.name}"></span></li>
+                            <li><strong>Ngày nhập:</strong> <span th:text="${#dates.format(item.createDate, 'dd-MM-yyyy')}"></span></li>
+                            <li><strong>Trạng thái:</strong>
+                                <span th:if="${item.available}" class="badge bg-success">Còn hàng</span>
+                                <span th:unless="${item.available}" class="badge bg-secondary">Hết hàng</span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-4">
+                            <a th:href="@{|/cart/add/${item.id}|}" class="btn btn-warning btn-lg me-2">
+                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                            </a>
+                            <a href="/" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white p-4">
+                <h5 class="fw-bold">Mô tả sản phẩm</h5>
+                <p>Đây là sản phẩm chất lượng cao chính hãng...</p>
+            </div>
+        </div>
+
+    </main>
+</div>

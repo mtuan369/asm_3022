@@ -1,0 +1,40 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:replace="~{/layout/index :: dynamic(~{::main})}">
+
+    <main>
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white text-dark fw-bold text-uppercase border-bottom">
+                <i class="fas fa-star text-warning"></i> SẢN PHẨM NỔI BẬT
+            </div>
+            <div class="card-body">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col" th:each="p : ${items}">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+
+                            <img th:src="${p.image}"
+                                 class="card-img-top"
+                                 alt="Ảnh sản phẩm"
+                                 style="height: 250px; object-fit: contain; padding: 10px;">
+
+                            <div class="card-body text-center">
+                                <h5 class="card-title">
+                                    <a th:href="@{|/product/detail/${p.id}|}" th:text="${p.name}" class="text-decoration-none text-dark"></a>
+                                </h5>
+                                <p class="card-text text-danger fw-bold fs-5" th:text="${#numbers.formatCurrency(p.price)}">$Price</p>
+                            </div>
+                            <div class="card-footer bg-white border-0 text-center pb-4">
+                                <a th:href="@{|/cart/add/${p.id}|}" class="btn btn-warning text-white px-3 shadow-sm">
+                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                </a>
+                                <a th:href="@{|/product/detail/${p.id}|}" class="btn btn-outline-secondary px-3 shadow-sm">
+                                    <i class="fas fa-eye"></i> Chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>

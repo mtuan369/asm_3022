@@ -1,0 +1,108 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="container-fluid p-0">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-uppercase text-dark">
+                    <i class="fas fa-tachometer-alt text-warning me-2"></i> Dashboard Quản Trị
+                </h3>
+                <span class="text-muted">Chào mừng trở lại, Administrator!</span>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #11998e, #38ef7d);">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase mb-1">Tổng Doanh Thu</h6>
+                                    <h3 class="fw-bold mb-0">$12,500</h3>
+                                </div>
+                                <i class="fas fa-dollar-sign fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #ff9966, #ff5e62);">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase mb-1">Đơn Hàng Mới</h6>
+                                    <h3 class="fw-bold mb-0">158</h3>
+                                </div>
+                                <i class="fas fa-shopping-bag fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #56CCF2, #2F80ED);">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase mb-1">Tổng Sản Phẩm</h6>
+                                    <h3 class="fw-bold mb-0">56</h3>
+                                </div>
+                                <i class="fas fa-box fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #F2994A, #F2C94C);">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-uppercase mb-1">Khách Hàng</h6>
+                                    <h3 class="fw-bold mb-0">1,200</h3>
+                                </div>
+                                <i class="fas fa-users fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white fw-bold">
+                            <i class="fas fa-star text-warning"></i> Chức Năng Quản Lý
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="/admin/products/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-box me-2 text-primary"></i> Quản lý Sản phẩm</span>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </a>
+                            <a href="/admin/categories/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-list me-2 text-success"></i> Quản lý Danh mục</span>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </a>
+                            <a href="/admin/orders/index" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-shopping-cart me-2 text-danger"></i> Quản lý Đơn hàng</span>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white fw-bold">
+                            <i class="fas fa-chart-pie text-info"></i> Báo Cáo & Thống Kê
+                        </div>
+                        <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                            <i class="fas fa-chart-bar fa-4x text-muted mb-3 opacity-25"></i>
+                            <p class="text-muted">Xem báo cáo chi tiết về hàng tồn kho và doanh số bán hàng.</p>
+                            <a href="/admin/report/inventory" class="btn btn-outline-primary px-4">Xem Báo Cáo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

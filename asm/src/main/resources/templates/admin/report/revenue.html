@@ -1,0 +1,28 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white fw-bold">
+                <i class="fas fa-chart-line"></i> BÁO CÁO DOANH THU THEO THÁNG
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover text-center">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Năm</th>
+                        <th>Tháng</th>
+                        <th>Tổng Doanh Thu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row : ${revenueData}">
+                        <td th:text="${row[0]}" class="fw-bold">2024</td>
+                        <td th:text="'Tháng ' + ${row[1]}">Tháng 1</td>
+                        <td class="text-danger fw-bold fs-5"
+                            th:text="${#numbers.formatCurrency(row[2])}">$1000</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

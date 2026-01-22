@@ -1,0 +1,33 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card mx-auto" style="max-width: 500px;">
+            <div class="card-header bg-success text-white">ĐĂNG KÝ TÀI KHOẢN</div>
+            <div class="card-body">
+                <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
+                <form action="/account/sign-up" method="post" enctype="multipart/form-data" th:object="${user}">
+                    <div class="mb-3">
+                        <label>Tên đăng nhập:</label>
+                        <input th:field="*{username}" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Mật khẩu:</label>
+                        <input th:field="*{password}" type="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Họ và tên:</label>
+                        <input th:field="*{fullname}" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email:</label>
+                        <input th:field="*{email}" type="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Hình ảnh:</label>
+                        <input name="photo_file" type="file" class="form-control">
+                    </div>
+                    <button class="btn btn-success w-100">ĐĂNG KÝ</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

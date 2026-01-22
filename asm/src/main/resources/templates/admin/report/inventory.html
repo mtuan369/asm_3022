@@ -1,0 +1,28 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="card">
+            <div class="card-header bg-success text-white fw-bold">THỐNG KÊ DOANH THU THEO LOẠI</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="bg-light">
+                    <tr>
+                        <th>Loại hàng</th>
+                        <th>Tổng doanh thu</th>
+                        <th>Số lượng bán ra</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.group.name}"></td>
+                        <td th:text="${#numbers.formatCurrency(item.sum)}"></td>
+                        <td th:text="${item.count} + ' sản phẩm'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-muted">
+                * Báo cáo được tổng hợp dựa trên dữ liệu sản phẩm hiện có.
+            </div>
+        </div>
+    </main>
+</div>
