@@ -2,198 +2,242 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="dynamic(main)">
 <head>
     <meta charset="UTF-8">
-    <title>J5 Shop - Modern Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J5 Shop - Mua sắm trực tuyến</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.css?v=16">
+
+    <style>
+        /* Nút mở chat */
+        .float-btn {
+            position: fixed; bottom: 30px; width: 55px; height: 55px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 26px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: 0.3s; cursor: pointer; color: white; border: none;
+        }
+        .float-btn:hover { transform: scale(1.1); }
+        .chat-btn { right: 30px; background: linear-gradient(135deg, #00C6FF, #0072FF); } /* Màu xanh AI */
+        .admin-btn { left: 30px; background: #222; color: #f1c40f; font-size: 20px; width: 45px; height: 45px; }
+
+        /* Khung Chat Chính */
+        .chat-box {
+            position: fixed; bottom: 100px; right: 30px;
+            width: 350px; height: 450px;
+            background: #fff; border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+            display: none; flex-direction: column; overflow: hidden;
+            z-index: 99999; font-family: 'Inter', sans-serif;
+            animation: slideUp 0.3s ease;
+        }
+        .chat-box.active { display: flex; }
+
+        /* Header Chat */
+        .chat-header {
+            background: linear-gradient(135deg, #00C6FF, #0072FF);
+            padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* Vùng nội dung chat */
+        .chat-body {
+            flex-grow: 1; padding: 15px; overflow-y: auto; background: #f9f9f9;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        /* Tin nhắn */
+        .message { display: flex; align-items: flex-end; max-width: 85%; font-size: 0.9rem; line-height: 1.4; }
+        .message.bot { align-self: flex-start; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+
+        .message .avatar {
+            width: 30px; height: 30px; border-radius: 50%; background: #ddd;
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
+            flex-shrink: 0; margin-bottom: 5px;
+        }
+        .message.bot .avatar { margin-right: 8px; background: #e1f5fe; color: #0072FF; }
+        .message.user .avatar { margin-left: 8px; background: #fee2e2; color: #ef4444; }
+
+        .message .bubble {
+            padding: 10px 14px; border-radius: 12px; position: relative; word-wrap: break-word;
+        }
+        .message.bot .bubble { background: #fff; color: #333; border: 1px solid #eee; border-bottom-left-radius: 2px; }
+        .message.user .bubble { background: #0072FF; color: white; border-bottom-right-radius: 2px; }
+
+        /* Hiệu ứng đang gõ (Typing...) */
+        .typing-indicator {
+            font-size: 12px; color: #999; margin-left: 40px; display: none; margin-bottom: 10px;
+        }
+
+        /* Footer nhập liệu */
+        .chat-footer {
+            padding: 10px; border-top: 1px solid #eee; background: #fff; display: flex; gap: 5px;
+        }
+        .chat-footer input {
+            border: 1px solid #ddd; border-radius: 20px; padding: 8px 15px; width: 100%; outline: none; font-size: 0.9rem;
+        }
+        .chat-footer button {
+            background: none; border: none; color: #0072FF; font-size: 1.2rem; cursor: pointer; padding: 0 10px;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-<div th:replace="~{/layout/menu :: .navbar}"></div>
+<div th:replace="~{/layout/menu :: nav}"></div>
 
-<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-aos="fade-down">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-    </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" class="d-block w-100" alt="Fashion">
-            <div class="carousel-caption d-none d-md-block">
-                <h2>THỜI TRANG ĐẲNG CẤP</h2>
-                <p class="fs-5">Bộ sưu tập mới nhất dành cho mùa hè 2026</p>
-                <a href="/product/list?cid=1" class="btn btn-hero mt-3">Mua Ngay</a>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1531297424005-06347203398f?q=80&w=2070&auto=format&fit=crop" class="d-block w-100" alt="Tech">
-            <div class="carousel-caption d-none d-md-block">
-                <h2>CÔNG NGHỆ ĐỈNH CAO</h2>
-                <p class="fs-5">iPhone 15, Macbook M3 với giá ưu đãi cực sốc</p>
-                <a href="/product/list?cid=2" class="btn btn-hero mt-3">Khám Phá</a>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1888&auto=format&fit=crop" class="d-block w-100" alt="Watch">
-            <div class="carousel-caption d-none d-md-block">
-                <h2>ĐỒNG HỒ SANG TRỌNG</h2>
-                <p class="fs-5">Khẳng định vị thế phái mạnh</p>
-                <a href="/product/list?cid=4" class="btn btn-hero mt-3">Xem Chi Tiết</a>
-            </div>
-        </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-</div>
-
-<div class="container">
-
-    <div class="row mb-5 text-center" data-aos="fade-up">
-        <div class="col-md-3">
-            <div class="feature-box">
-                <i class="fas fa-shipping-fast feature-icon"></i>
-                <h6 class="fw-bold">Miễn Phí Vận Chuyển</h6>
-                <small class="text-muted">Cho đơn hàng trên 500k</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="feature-box">
-                <i class="fas fa-undo feature-icon"></i>
-                <h6 class="fw-bold">Hoàn Tiền 100%</h6>
-                <small class="text-muted">Nếu sản phẩm lỗi</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="feature-box">
-                <i class="fas fa-headset feature-icon"></i>
-                <h6 class="fw-bold">Hỗ Trợ 24/7</h6>
-                <small class="text-muted">Chat với chúng tôi ngay</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="feature-box">
-                <i class="fas fa-shield-alt feature-icon"></i>
-                <h6 class="fw-bold">Thanh Toán An Toàn</h6>
-                <small class="text-muted">Bảo mật tuyệt đối</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-3" data-aos="fade-right">
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center"
-                     data-bs-toggle="collapse" data-bs-target="#categoryMenu" style="cursor: pointer;">
-                    <span><i class="fas fa-bars me-2"></i> DANH MỤC</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="collapse show" id="categoryMenu">
-                    <div class="list-group list-group-flush">
-                        <a th:each="c : ${cates}"
-                           th:href="@{|/product/list?cid=${c.id}|}"
-                           class="list-group-item list-group-item-action">
-                            <i class="fas fa-caret-right me-2 text-warning"></i>
-                            <span th:text="${c.name}"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card border-0 mb-3 overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=80&w=2070&auto=format&fit=crop" class="img-fluid rounded">
-            </div>
-        </div>
-
-        <div class="col-md-9">
-            <div th:replace="${main}"></div>
-        </div>
+<div class="flex-grow-1">
+    <div class="container py-3">
+        <div th:replace="${main}"></div>
     </div>
 </div>
 
-<footer class="text-white pt-5 pb-4 mt-5" style="background-color: #3E2723;" data-aos="fade-up">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <h5 class="text-uppercase fw-bold text-warning mb-3">J5 SHOP</h5>
-                <p class="small">Hệ thống bán lẻ uy tín hàng đầu. Nơi trao gửi niềm tin của hàng triệu khách hàng Việt Nam.</p>
-                <div class="mt-3">
-                    <a href="#" class="text-white me-3 fs-5"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white me-3 fs-5"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white fs-5"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h6 class="text-uppercase fw-bold text-warning">Liên Hệ</h6>
-                <p class="small mb-1"><i class="fas fa-map-marker-alt me-2"></i> Quy Nhơn, Bình Định</p>
-                <p class="small mb-1"><i class="fas fa-envelope me-2"></i> tuan.truong@j5shop.com</p>
-                <p class="small"><i class="fas fa-phone me-2"></i> 0987 654 321</p>
-            </div>
-            <div class="col-md-4 mb-3 text-md-end">
-                <h6 class="text-uppercase fw-bold text-warning">Người Sáng Lập</h6>
-                <div class="border border-warning p-2 d-inline-block rounded mt-2">
-                    <h5 class="m-0">Trương Minh Tuấn</h5>
-                </div>
-            </div>
-        </div>
-        <hr class="border-secondary">
-        <div class="text-center small text-muted">© 2026 J5 Shop - Designed by Truong Minh Tuan</div>
-    </div>
-</footer>
+<div th:replace="~{/layout/footer :: footer}"></div>
+<div th:replace="~{/layout/menu :: minicart}"></div>
 
-<div class="chat-btn" onclick="toggleChat()"><i class="fas fa-comment-dots"></i></div>
+<button class="float-btn chat-btn" onclick="toggleChat()">
+    <i class="fas fa-robot"></i>
+</button>
+
+<a th:if="${session.user != null and session.user.admin}" href="/admin/index" class="float-btn admin-btn">
+    <i class="fas fa-user-shield"></i>
+</a>
+
 <div class="chat-box" id="chatBox">
     <div class="chat-header">
-        <span><i class="fas fa-robot me-2"></i> Trợ lý ảo J5</span>
-        <i class="fas fa-times" style="cursor: pointer;" onclick="toggleChat()"></i>
+        <div>
+            <i class="fas fa-robot me-2"></i><strong>J5 AI Assistant</strong>
+            <div style="font-size: 10px; opacity: 0.8;">Luôn sẵn sàng hỗ trợ</div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" onclick="toggleChat()"></button>
     </div>
+
     <div class="chat-body" id="chatBody">
-        <div class="message bot-message">Xin chào! Em có thể giúp gì cho anh/chị ạ?<br>(Gõ <b>"son"</b>, <b>"áo"</b>...)</div>
+        <div class="message bot">
+            <div class="avatar"><i class="fas fa-robot"></i></div>
+            <div class="bubble">Xin chào! Mình là trợ lý ảo của J5 Shop. Bạn cần giúp gì không?</div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <i class="fas fa-ellipsis-h"></i> AI đang trả lời...
+        </div>
     </div>
+
     <div class="chat-footer">
-        <input type="text" id="chatInput" class="chat-input" placeholder="Nhập tin nhắn..." onkeypress="handleEnter(event)">
-        <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        <input type="text" id="chatInput" placeholder="Hỏi gì đó (VD: giá, địa chỉ...)" onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    AOS.init({ duration: 800, once: true });
 
+<script>
+    AOS.init();
+
+    // 1. Logic Bật/Tắt Chat
     function toggleChat() {
-        var chatBox = document.getElementById("chatBox");
-        chatBox.classList.toggle("active");
-        if(chatBox.classList.contains("active")) document.getElementById("chatInput").focus();
+        const box = document.getElementById('chatBox');
+        box.classList.toggle('active');
+        if(box.classList.contains('active')) {
+            document.getElementById('chatInput').focus();
+        }
     }
-    function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
+
+    // 2. Logic Gửi Tin Nhắn
+    function handleEnter(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
     function sendMessage() {
-        var input = document.getElementById("chatInput");
-        var msg = input.value.trim();
-        if(!msg) return;
-        addMessage(msg, 'user-message');
-        input.value = "";
-        fetch('/rest/chat?message=' + encodeURIComponent(msg))
-            .then(res => res.json())
-            .then(data => addMessage(data.answer, 'bot-message'))
-            .catch(err => addMessage("Lỗi kết nối!", 'bot-message'));
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Hiển thị tin nhắn User
+        addMessage(text, 'user');
+        input.value = '';
+
+        // AI "suy nghĩ" (Delay 1 giây)
+        showTyping(true);
+        setTimeout(() => {
+            const reply = getBotReply(text);
+            showTyping(false);
+            addMessage(reply, 'bot');
+        }, 1000);
     }
-    function addMessage(text, cls) {
-        var body = document.getElementById("chatBody");
-        var div = document.createElement("div");
-        div.className = "message " + cls;
-        div.innerHTML = text;
-        body.appendChild(div);
+
+    function addMessage(text, sender) {
+        const body = document.getElementById('chatBody');
+        const icon = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+
+        const msgHTML = `
+            <div class="message ${sender}">
+                <div class="avatar">${icon}</div>
+                <div class="bubble">${text}</div>
+            </div>
+        `;
+
+        // Chèn tin nhắn mới TRƯỚC cái typing indicator
+        const typing = document.getElementById('typingIndicator');
+        typing.insertAdjacentHTML('beforebegin', msgHTML);
+
+        // Tự cuộn xuống dưới cùng
         body.scrollTop = body.scrollHeight;
     }
-</script>
 
+    function showTyping(show) {
+        const indicator = document.getElementById('typingIndicator');
+        indicator.style.display = show ? 'block' : 'none';
+        const body = document.getElementById('chatBody');
+        body.scrollTop = body.scrollHeight;
+    }
+
+    // 3. TRÍ TUỆ NHÂN TẠO "CHẠY BẰNG CƠM" (ĐÂY LÀ PHẦN QUAN TRỌNG)
+    // Bạn có thể thêm các từ khóa và câu trả lời vào đây
+    function getBotReply(text) {
+        text = text.toLowerCase();
+
+        if (text.includes('xin chào') || text.includes('hello') || text.includes('hi')) {
+            return "Chào bạn! Chúc bạn một ngày tốt lành. Bạn muốn mua gì hôm nay?";
+        }
+        if (text.includes('giá') || text.includes('tiền') || text.includes('bao nhiêu')) {
+            return "Giá sản phẩm bên mình rất cạnh tranh. Bạn có thể xem chi tiết từng món bằng cách bấm vào ảnh nhé!";
+        }
+        if (text.includes('địa chỉ') || text.includes('ở đâu')) {
+            return "J5 Shop có địa chỉ tại: FPT Polytechnic, Trịnh Văn Bô, Hà Nội.";
+        }
+        if (text.includes('bảo hành') || text.includes('đổi trả')) {
+            return "Bên mình bảo hành 12 tháng và hỗ trợ đổi trả trong 7 ngày nếu có lỗi nhà sản xuất ạ.";
+        }
+        if (text.includes('liên hệ') || text.includes('sdt')) {
+            return "Hotline hỗ trợ: 1900 636 648 (8h - 22h hàng ngày).";
+        }
+        if (text.includes('ship') || text.includes('giao hàng')) {
+            return "J5 Shop giao hàng toàn quốc. Thời gian từ 2-4 ngày tùy khu vực.";
+        }
+
+        return "Xin lỗi, mình là AI nên chưa hiểu câu này. Bạn hãy thử hỏi về 'giá', 'địa chỉ' hoặc 'bảo hành' xem sao?";
+    }
+
+    // 4. Logic Mini Cart & Toast
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('openCart') === 'true'){
+        const cartElement = document.getElementById('offcanvasCart');
+        if(cartElement){
+            new bootstrap.Offcanvas(cartElement).show();
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            Swal.fire({
+                toast: true, position: 'top-end', icon: 'success',
+                title: 'Đã thêm vào giỏ hàng!', showConfirmButton: false, timer: 3000
+            });
+        }
+    }
+</script>
 </body>
 </html>

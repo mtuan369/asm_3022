@@ -1,87 +1,133 @@
 <div xmlns:th="http://www.thymeleaf.org">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-warning" href="/">
-                <i class="fas fa-store"></i> J5 SHOP
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-custom" th:fragment="nav">
+        <div class="container d-flex align-items-center justify-content-between">
+
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="fas fa-shopping-bag me-2"></i> J5 SHOP
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="fas fa-bars"></i>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarScroll">
-                <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-home"></i> Trang chủ
+            <div class="collapse navbar-collapse" id="navContent">
+
+                <div class="mx-auto w-100 d-flex justify-content-center px-lg-4 my-2 my-lg-0">
+                    <form action="/product/list" class="search-box-pro">
+                        <input type="text" name="keywords" th:value="${keywords}" th:placeholder="#{nav.search_placeholder}">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <ul class="navbar-nav ms-auto align-items-center">
+
+                    <li class="nav-item dropdown ms-2">
+                        <a class="nav-link dropdown-toggle text-white small fw-bold" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i> <span th:text="#{nav.language}">Lang</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home/about">
-                            <i class="fas fa-info-circle"></i> Giới thiệu
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown" th:if="${session.user != null and session.user.admin}">
-                        <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-shield"></i> Quản trị
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/admin/products/index">Quản lý Sản phẩm</a></li>
-                            <li><a class="dropdown-item" href="/admin/categories/index">Quản lý Loại hàng</a></li>
-                            <li><a class="dropdown-item" href="/admin/accounts/index">Quản lý Tài khoản</a></li>
-                            <li><a class="dropdown-item" href="/admin/orders/index">Quản lý Đơn hàng</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/admin/report/inventory">Báo cáo Tồn kho</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="?lang=vi">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/323/323319.png" width="20" class="me-2"> Tiếng Việt
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="?lang=en">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/197/197374.png" width="20" class="me-2"> English
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                </ul>
 
-                <form action="/product/list" method="get" class="d-flex mx-auto my-2 my-lg-0" style="max-width: 400px; width: 100%;">
-                    <input class="form-control me-2" type="search" name="keywords"
-                           placeholder="Tìm kiếm sản phẩm..."
-                           th:value="${keywords}" aria-label="Search">
-                    <button class="btn btn-outline-warning" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-2">
-                        <a class="nav-link position-relative" href="/cart/view">
-                            <i class="fas fa-shopping-cart fa-lg"></i> Giỏ hàng
-                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link nav-link-pro" href="/" th:text="#{nav.home}">Trang chủ</a>
+                    </li>
+
+                    <li class="nav-item dropdown d-flex align-items-center ms-3">
+                        <div th:if="${session.user == null}" class="d-flex text-white small fw-bold align-items-center">
+                            <a href="/auth/login" class="nav-link-pro m-0" th:text="#{nav.login}">Đăng nhập</a>
+                            <span class="text-white opacity-50">|</span>
+                            <a href="/account/sign-up" class="nav-link-pro m-0" th:text="#{nav.register}">Đăng ký</a>
+                        </div>
+
+                        <a th:if="${session.user != null}" class="nav-link dropdown-toggle d-flex align-items-center text-white p-0" href="#" data-bs-toggle="dropdown">
+                            <img th:src="@{|/images/${session.user.photo}|}"
+                                 onerror="this.src='https://ui-avatars.com/api/?name=U&background=random&color=fff'"
+                                 class="rounded-circle border border-white me-2" width="28" height="28" style="object-fit: cover;">
+                            <span class="small fw-bold d-none d-lg-block" th:text="${session.user.fullname}">User</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3" th:if="${session.user != null}">
+                            <li th:if="${session.user.admin}">
+                                <a class="dropdown-item text-danger fw-bold" href="/admin/index">
+                                    <i class="fas fa-cog me-2"></i><span th:text="#{nav.admin}">Quản trị</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/order/list">
+                                    <i class="fas fa-box me-2 text-primary"></i><span th:text="#{nav.my_orders}">Đơn mua</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/account/edit-profile">
+                                    <i class="fas fa-user me-2 text-info"></i><span th:text="#{nav.profile}">Hồ sơ</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="/auth/logoff" th:text="#{nav.logout}">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item ms-4 position-relative">
+                        <a href="#offcanvasCart" data-bs-toggle="offcanvas" class="header-icon" th:title="#{nav.cart}">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="badge-cart" th:if="${session.cart != null}" th:text="${session.cart.count}">0</span>
+                            <span class="badge-cart" th:unless="${session.cart != null}">0</span>
                         </a>
                     </li>
 
-                    <th:block th:if="${session.user == null}">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/auth/login">Đăng nhập</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/sign-up">Đăng ký</a>
-                        </li>
-                    </th:block>
-
-                    <th:block th:if="${session.user != null}">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <img th:src="@{|/images/${session.user.photo}|}"
-                                     onerror="this.src='/images/user.png'"
-                                     class="rounded-circle" width="30" height="30" style="object-fit: cover; border: 1px solid white;">
-                                <span class="ms-1" th:text="${session.user.fullname}">User Name</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/account/edit-profile">Cập nhật tài khoản</a></li>
-                                <li><a class="dropdown-item" href="/account/change-password">Đổi mật khẩu</a></li>
-                                <li><a class="dropdown-item" href="/order/list">Lịch sử mua hàng</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="/auth/logoff">Đăng xuất</a></li>
-                            </ul>
-                        </li>
-                    </th:block>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" th:fragment="minicart">
+        <div class="offcanvas-header bg-light border-bottom py-2">
+            <h6 class="offcanvas-title fw-bold text-uppercase">
+                <i class="fas fa-shopping-cart me-2"></i><span th:text="#{nav.cart}">Giỏ hàng</span>
+            </h6>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div th:if="${session.cart == null or session.cart.count == 0}" class="text-center py-5">
+                <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" width="80" class="opacity-50 mb-3">
+                <p class="text-muted small">Chưa có sản phẩm nào</p>
+            </div>
+            <ul class="list-group list-group-flush" th:if="${session.cart != null and session.cart.count > 0}">
+                <li class="list-group-item d-flex align-items-center py-2" th:each="item : ${session.cart.items}">
+                    <img th:src="@{|${item.image}|}" width="50" height="50" class="rounded border me-2 object-fit-cover">
+                    <div class="flex-grow-1" style="line-height: 1.2;">
+                        <a th:href="@{|/product/detail/${item.id}|}" class="text-dark text-decoration-none small fw-bold d-block text-truncate" style="max-width: 160px;" th:text="${item.name}"></a>
+                        <small class="text-muted" style="font-size: 11px;">Size: <span th:text="${item.size}"></span> | Màu: <span th:text="${item.color}"></span></small>
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <span class="text-danger fw-bold small" th:text="${#numbers.formatCurrency(item.price)}"></span>
+                            <span class="badge bg-light text-dark border">x<span th:text="${item.quantity}"></span></span>
+                        </div>
+                    </div>
+                    <a th:href="@{|/cart/remove/${item.id}|}" class="btn btn-sm text-secondary"><i class="fas fa-times"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="p-3 border-top bg-light" th:if="${session.cart != null and session.cart.count > 0}">
+            <div class="d-flex justify-content-between mb-2 small fw-bold">
+                <span>Tổng tiền:</span>
+                <span class="text-danger" th:text="${#numbers.formatCurrency(session.cart.amount)}"></span>
+            </div>
+            <a href="/cart/view" class="btn btn-outline-dark w-100 btn-sm mb-2 fw-bold">XEM GIỎ HÀNG</a>
+            <a href="/order/checkout" class="btn btn-danger w-100 btn-sm fw-bold">THANH TOÁN</a>
+        </div>
+    </div>
 </div>

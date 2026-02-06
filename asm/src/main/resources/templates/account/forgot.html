@@ -1,0 +1,23 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-4">
+                <div class="bg-white p-4 rounded shadow-sm text-center">
+                    <h5 class="fw-bold mb-3">QUÊN MẬT KHẨU?</h5>
+                    <p class="text-muted small mb-4">Nhập email của bạn, chúng tôi sẽ gửi lại mật khẩu.</p>
+
+                    <div th:if="${message}" class="alert alert-info small" th:text="${message}"></div>
+
+                    <form action="/account/forgot-password" method="post">
+                        <div class="mb-3 text-start">
+                            <label class="form-label small fw-bold">Email đăng ký</label>
+                            <input name="email" type="email" class="form-control" required placeholder="name@example.com">
+                        </div>
+                        <button class="btn btn-primary w-100 mb-3">Lấy lại mật khẩu</button>
+                        <a href="/auth/login" class="small text-decoration-none">Quay lại đăng nhập</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

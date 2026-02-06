@@ -1,27 +1,26 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                         class="img-fluid rounded shadow" alt="About Us">
-                </div>
-                <div class="col-md-6">
-                    <h2 class="fw-bold text-primary">Về J5 Shop</h2>
-                    <p class="lead">Chào mừng bạn đến với dự án Assignment Java 5!</p>
-                    <p>
-                        Đây là trang web thương mại điện tử demo được xây dựng dựa trên:
-                    </p>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-check text-success"></i> Spring Boot 3.x</li>
-                        <li><i class="fas fa-check text-success"></i> Spring Data JPA & SQL Server</li>
-                        <li><i class="fas fa-check text-success"></i> Thymeleaf & Bootstrap 5</li>
-                    </ul>
-                    <p>
-                        Sinh viên thực hiện: <strong>[TRUONG MINH TUAN]</strong><br>
-                        Mã số sinh viên: <strong>[PY00239]</strong>
-                    </p>
-                </div>
+        <div class="bg-dark text-white rounded-3 p-5 mb-5 text-center"
+             style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200'); background-size: cover; background-position: center;">
+            <h1 class="display-4 fw-bold">Về J5 Shop</h1>
+            <p class="lead opacity-75">Nền tảng thương mại điện tử hiện đại, tốc độ và tin cậy.</p>
+        </div>
+
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                <h2 class="fw-bold text-primary mb-3">Câu chuyện của chúng tôi</h2>
+                <p class="text-muted" style="line-height: 1.8;">
+                    J5 Shop là dự án Assignment Java 5 được phát triển với niềm đam mê công nghệ.
+                    Chúng tôi áp dụng Spring Boot 3, Thymeleaf và Bootstrap 5 để tạo ra trải nghiệm mua sắm mượt mà nhất.
+                </p>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Giao diện chuẩn Responsive</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Bảo mật thông tin khách hàng</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Hệ thống quản trị mạnh mẽ</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600" class="img-fluid rounded shadow-sm">
             </div>
         </div>
     </main>

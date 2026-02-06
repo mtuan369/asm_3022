@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class CartController {
     @Autowired
@@ -19,23 +21,47 @@ public class CartController {
         return "cart/view";
     }
 
-    // --- SỬA LỖI: Long -> Integer ---
+    // 1. NÚT "THÊM VÀO GIỎ" (Ở lại trang & mở Mini Cart)
     @RequestMapping("/cart/add/{id}")
-    public String add(@PathVariable("id") Integer id) { // <--- Đã sửa thành Integer
-        cart.add(id);
-        return "redirect:/cart/view";
+    public String add(@PathVariable("id") Integer id,
+                      @RequestParam(value = "size", required = false, defaultValue = "") String size,
+                      @RequestParam(value = "color", required = false, defaultValue = "") String color,
+                      HttpServletRequest request) {
+
+        cart.add(id, size, color); // Thêm vào giỏ
+
+        // Lấy URL hiện tại để reload lại đúng trang đó
+        String referer = request.getHeader("Referer");
+        if(referer == null || !referer.contains("/product/")) {
+            referer = "/product/list";
+        }
+
+        // Thêm tham số ?openCart=true để JS bên layout/index.html tự động mở Mini Cart
+        return "redirect:" + referer + (referer.contains("?") ? "&" : "?") + "openCart=true";
     }
 
-    // --- SỬA LỖI: Long -> Integer ---
+    // 2. NÚT "MUA NGAY" (Chuyển thẳng đến trang Thanh toán)
+    @RequestMapping("/cart/buy/{id}")
+    public String buy(@PathVariable("id") Integer id,
+                      @RequestParam(value = "size", required = false, defaultValue = "") String size,
+                      @RequestParam(value = "color", required = false, defaultValue = "") String color) {
+
+        cart.add(id, size, color); // Thêm vào giỏ trước
+        return "redirect:/order/checkout"; // Chuyển hướng ngay lập tức
+    }
+
     @RequestMapping("/cart/remove/{id}")
-    public String remove(@PathVariable("id") Integer id) { // <--- Đã sửa thành Integer
+    public String remove(@PathVariable("id") Integer id, HttpServletRequest request) {
         cart.remove(id);
-        return "redirect:/cart/view";
+
+        // Xóa xong thì load lại trang cũ và mở lại Cart cho khách thấy
+        String referer = request.getHeader("Referer");
+        if(referer == null) referer = "/product/list";
+        return "redirect:" + referer + (referer.contains("?") ? "&" : "?") + "openCart=true";
     }
 
-    // --- SỬA LỖI: Long -> Integer ---
     @RequestMapping("/cart/update")
-    public String update(@RequestParam("id") Integer id, @RequestParam("qty") Integer qty) { // <--- Đã sửa thành Integer
+    public String update(@RequestParam("id") Integer id, @RequestParam("qty") Integer qty) {
         cart.update(id, qty);
         return "redirect:/cart/view";
     }

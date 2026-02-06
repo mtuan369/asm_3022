@@ -1,45 +1,222 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card mt-3">
-            <div class="row g-0">
-                <div class="col-md-5 text-center p-3">
-                    <img th:src="@{|${item.image}|}" class="img-fluid rounded shadow-sm"
-                         alt="Product Image" style="max-height: 400px; object-fit: contain;">
+        <style>
+            .radio-option { display: none; }
+            .label-option {
+                display: inline-block; padding: 6px 15px; border: 1px solid #ddd; border-radius: 4px;
+                margin-right: 5px; cursor: pointer; font-size: 0.9rem; transition: 0.2s;
+            }
+            .radio-option:checked + .label-option {
+                background-color: #ee4d2d; color: white; border-color: #ee4d2d;
+            }
+            .color-circle {
+                width: 30px; height: 30px; border-radius: 50%; display: inline-block;
+                border: 2px solid #eee; cursor: pointer; position: relative; margin-right: 5px;
+            }
+            .radio-color:checked + .color-circle { border-color: #ee4d2d; transform: scale(1.1); }
+
+            /* Style cho phần mô tả */
+            .description-content { font-size: 0.95rem; line-height: 1.6; color: #555; }
+            .description-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px 0; }
+        </style>
+
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small text-muted">
+                <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-muted">Trang chủ</a></li>
+                <li class="breadcrumb-item"><span th:text="${item.category.name}"></span></li>
+                <li class="breadcrumb-item active" th:text="${item.name}"></li>
+            </ol>
+        </nav>
+
+        <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> <span th:text="${message}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow-sm mb-4">
+            <div class="row">
+                <div class="col-md-5">
+                    <img th:src="@{|${item.image}|}" class="w-100 rounded border"
+                         onerror="this.src='https://placehold.co/500'">
                 </div>
 
-                <div class="col-md-7">
-                    <div class="card-body">
-                        <h3 class="card-title fw-bold text-primary" th:text="${item.name}">Tên sản phẩm</h3>
+                <div class="col-md-7 ps-md-4">
+                    <h3 class="fw-bold" th:text="${item.name}"></h3>
 
-                        <div class="my-3">
-                            <span class="fs-4 text-danger fw-bold" th:text="${#numbers.formatCurrency(item.price)}">$999.00</span>
+                    <div class="text-warning mb-3">
+                        <span th:if="${item.avgStars > 0}" th:each="i : ${#numbers.sequence(1, item.avgStars)}"><i class="fas fa-star"></i></span>
+                        <span th:if="${item.avgStars < 5}" th:each="i : ${#numbers.sequence(item.avgStars + 1, 5)}"><i class="far fa-star"></i></span>
+                        <span class="text-muted text-dark small ms-2" th:text="'(' + ${#lists.size(reviews)} + ' đánh giá)'"></span>
+                    </div>
+
+                    <h2 class="fw-bold text-danger mb-3" th:text="${#numbers.formatCurrency(item.price)}"></h2>
+
+                    <p class="text-muted small mb-4">
+                        Hàng chính hãng 100% • Bảo hành 12 tháng • Đổi trả trong 7 ngày
+                    </p>
+
+                    <form th:action="@{|/cart/add/${item.id}|}" method="post">
+
+                        <div th:if="${item.category.id == 4}" class="bg-light p-3 rounded mb-4">
+                            <div class="mb-3">
+                                <label class="fw-bold small mb-2 d-block text-muted">MÀU SẮC:</label>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <input type="radio" name="color" id="c1" value="Đen" class="radio-option radio-color" checked>
+                                    <label for="c1" class="color-circle bg-dark" title="Đen"></label>
+
+                                    <input type="radio" name="color" id="c2" value="Trắng" class="radio-option radio-color">
+                                    <label for="c2" class="color-circle bg-white border" title="Trắng"></label>
+
+                                    <input type="radio" name="color" id="c4" value="Xanh" class="radio-option radio-color">
+                                    <label for="c4" class="color-circle bg-primary" title="Xanh"></label>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="fw-bold small mb-2 d-block text-muted">KÍCH THƯỚC:</label>
+                                <div>
+                                    <input type="radio" name="size" id="s1" value="S" class="radio-option">
+                                    <label for="s1" class="label-option">S</label>
+
+                                    <input type="radio" name="size" id="s2" value="M" class="radio-option" checked>
+                                    <label for="s2" class="label-option">M</label>
+
+                                    <input type="radio" name="size" id="s3" value="L" class="radio-option">
+                                    <label for="s3" class="label-option">L</label>
+
+                                    <input type="radio" name="size" id="s4" value="XL" class="radio-option">
+                                    <label for="s4" class="label-option">XL</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <ul class="list-unstyled">
-                            <li><strong>Mã sản phẩm:</strong> <span th:text="${item.id}"></span></li>
-                            <li><strong>Loại hàng:</strong> <span th:text="${item.category.name}"></span></li>
-                            <li><strong>Ngày nhập:</strong> <span th:text="${#dates.format(item.createDate, 'dd-MM-yyyy')}"></span></li>
-                            <li><strong>Trạng thái:</strong>
-                                <span th:if="${item.available}" class="badge bg-success">Còn hàng</span>
-                                <span th:unless="${item.available}" class="badge bg-secondary">Hết hàng</span>
-                            </li>
-                        </ul>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-danger btn-lg flex-grow-1">
+                                <i class="fas fa-cart-plus me-2"></i> Thêm vào giỏ
+                            </button>
 
-                        <div class="mt-4">
-                            <a th:href="@{|/cart/add/${item.id}|}" class="btn btn-warning btn-lg me-2">
-                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                            <button type="submit"
+                                    th:formaction="@{|/cart/buy/${item.id}|}"
+                                    class="btn btn-danger btn-lg flex-grow-1">
+                                Mua ngay
+                            </button>
+
+                            <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#shareModal" title="Chia sẻ cho bạn bè">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow-sm mb-4">
+            <h5 class="fw-bold text-uppercase border-bottom pb-3 mb-3"><i class="fas fa-align-left me-2"></i>Chi Tiết Sản Phẩm</h5>
+
+            <div class="description-content">
+                <div th:if="${item.description != null}" th:utext="${item.description}"></div>
+
+                <div th:if="${item.description == null or item.description == ''}" class="text-muted text-center py-4">
+                    <p>Hiện chưa có mô tả chi tiết cho sản phẩm này.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="fw-bold text-uppercase border-bottom pb-2 mb-3">Sản Phẩm Tương Tự</h5>
+            <div class="row row-cols-2 row-cols-md-4 g-3">
+                <div class="col" th:each="p : ${related}">
+                    <div class="product-card">
+                        <div class="product-img-frame">
+                            <a th:href="@{|/product/detail/${p.id}|}">
+                                <img th:src="${p.image}" onerror="this.src='https://placehold.co/300'">
                             </a>
-                            <a href="/" class="btn btn-outline-secondary btn-lg">
-                                <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
-                            </a>
+                        </div>
+                        <div class="card-body p-2">
+                            <a th:href="@{|/product/detail/${p.id}|}" class="product-name small fw-bold" th:text="${p.name}"></a>
+                            <div class="text-danger fw-bold" th:text="${#numbers.formatCurrency(p.price)}"></div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card-footer bg-white p-4">
-                <h5 class="fw-bold">Mô tả sản phẩm</h5>
-                <p>Đây là sản phẩm chất lượng cao chính hãng...</p>
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h5 class="fw-bold mb-4">Đánh giá từ khách hàng</h5>
+            <div class="mb-4">
+                <div th:each="r : ${reviews}" class="d-flex mb-3 border-bottom pb-3">
+                    <img th:src="@{|/images/${r.account.photo}|}" class="rounded-circle me-3" width="40" height="40"
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+                    <div>
+                        <div class="fw-bold small" th:text="${r.account.fullname}">User</div>
+                        <div class="text-warning small">
+                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, r.rating)}"></i>
+                        </div>
+                        <p class="mb-0 small mt-1" th:text="${r.comment}"></p>
+                        <small class="text-muted" style="font-size: 10px;" th:text="${#dates.format(r.reviewDate, 'dd-MM-yyyy')}"></small>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(reviews)}" class="text-muted small">Chưa có đánh giá nào.</div>
+            </div>
+
+            <div class="bg-light p-3 rounded" th:if="${session.user != null}">
+                <form action="/product/review" method="post">
+                    <input type="hidden" name="id" th:value="${item.id}">
+                    <h6 class="fw-bold small">Viết đánh giá của bạn</h6>
+                    <div class="mb-2">
+                        <label class="small text-muted me-2">Chọn sao:</label>
+                        <select name="rating" class="form-select form-select-sm d-inline-block w-auto">
+                            <option value="5">5 Sao (Tuyệt vời)</option>
+                            <option value="4">4 Sao (Tốt)</option>
+                            <option value="3">3 Sao (Bình thường)</option>
+                            <option value="2">2 Sao (Tệ)</option>
+                            <option value="1">1 Sao (Rất tệ)</option>
+                        </select>
+                    </div>
+                    <textarea name="comment" class="form-control mb-2" rows="2" placeholder="Chia sẻ cảm nhận..."></textarea>
+                    <button class="btn btn-primary btn-sm">Gửi đánh giá</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="shareModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title fw-bold"><i class="fas fa-envelope me-2"></i>Chia sẻ sản phẩm</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form action="/product/share" method="post">
+                        <div class="modal-body p-4">
+                            <input type="hidden" name="id" th:value="${item.id}">
+
+                            <div class="d-flex align-items-center bg-light p-3 rounded mb-3">
+                                <img th:src="@{|${item.image}|}" width="60" class="rounded border me-3 bg-white">
+                                <div>
+                                    <h6 class="fw-bold mb-1" th:text="${item.name}"></h6>
+                                    <span class="text-danger fw-bold small" th:text="${#numbers.formatCurrency(item.price)}"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-muted">EMAIL NGƯỜI NHẬN:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted"><i class="fas fa-at"></i></span>
+                                    <input type="email" name="email" class="form-control" placeholder="vidu: banbe@gmail.com" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary px-4"><i class="fas fa-paper-plane me-1"></i> Gửi ngay</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 

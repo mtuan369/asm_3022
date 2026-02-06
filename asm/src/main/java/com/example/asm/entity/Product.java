@@ -28,6 +28,9 @@ public class Product implements Serializable {
     String image;
     Double price;
 
+    @Column(name = "Description", columnDefinition = "nvarchar(MAX)")
+    String description;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "Createdate")
     Date createDate = new Date();
@@ -42,6 +45,29 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product")
     List<OrderDetail> orderDetails;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Review> reviews;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Favorite> favorites;
+
+    // --- CÁC TRƯỜNG TRANSIENT (Dùng cho giỏ hàng, không lưu vào bảng Products) ---
     @Transient
     Integer quantity = 1;
+
+    @Transient
+    String size = "";  // [MỚI] Lưu size tạm thời trong giỏ
+
+    @Transient
+    String color = ""; // [MỚI] Lưu màu tạm thời trong giỏ
+    // -----------------------------------------------------------------------------
+
+    public Integer getAvgStars() {
+        if (this.reviews == null || this.reviews.isEmpty()) return 0;
+        int total = 0;
+        for (Review r : this.reviews) total += r.getRating();
+        return total / this.reviews.size();
+    }
 }

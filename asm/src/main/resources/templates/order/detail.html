@@ -1,29 +1,118 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card">
-            <div class="card-header bg-secondary text-white">CHI TIẾT ĐƠN HÀNG #<span th:text="${order.id}"></span></div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Thành tiền</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="d : ${order.orderDetails}">
-                        <td th:text="${d.product.name}"></td>
-                        <td th:text="${d.price}"></td>
-                        <td th:text="${d.quantity}"></td>
-                        <td th:text="${d.price * d.quantity}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+        <style>
+            .track-line { height: 4px !important; background-color: #ddd; opacity: 1; }
+            .step-active .track-line { background-color: #28a745; }
+            .step-item { position: relative; z-index: 1; }
+            .step-icon {
+                width: 45px; height: 45px; border-radius: 50%; background: #ddd; color: #fff;
+                display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+                font-size: 20px; transition: 0.3s;
+            }
+            .step-active .step-icon { background: #28a745; box-shadow: 0 0 0 5px rgba(40, 167, 69, 0.2); }
+            .step-text { font-size: 13px; font-weight: bold; color: #999; text-transform: uppercase; }
+            .step-active .step-text { color: #28a745; }
+        </style>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-dark m-0">Chi tiết đơn hàng #<span th:text="${order.id}"></span></h4>
+            <a href="/order/list" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Quay lại</a>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body px-5 py-5">
+                <div class="d-flex justify-content-between position-relative">
+                    <div class="position-absolute top-50 start-0 w-100 translate-middle-y track-line" style="z-index: 0;"></div>
+
+                    <div class="position-absolute top-50 start-0 translate-middle-y track-line bg-success"
+                         style="z-index: 0; transition: 1s;"
+                         th:styleappend="${order.status == 0 ? 'width: 0%' : (order.status == 1 ? 'width: 33%' : (order.status == 4 ? 'width: 66%' : 'width: 100%'))}">
+                    </div>
+
+                    <div class="step-item text-center step-active">
+                        <div class="step-icon"><i class="fas fa-file-invoice"></i></div>
+                        <div class="step-text">Đã đặt đơn</div>
+                    </div>
+
+                    <div class="step-item text-center" th:classappend="${order.status >= 1 ? 'step-active' : ''}">
+                        <div class="step-icon"><i class="fas fa-truck"></i></div>
+                        <div class="step-text">Đang giao</div>
+                    </div>
+
+                    <div class="step-item text-center" th:classappend="${order.status >= 4 ? 'step-active' : ''}">
+                        <div class="step-icon"><i class="fas fa-box-open"></i></div>
+                        <div class="step-text">Đã đến nơi</div>
+                    </div>
+
+                    <div class="step-item text-center" th:classappend="${order.status == 2 ? 'step-active' : ''}">
+                        <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="step-text">Hoàn tất</div>
+                    </div>
+                </div>
             </div>
-            <div class="card-footer">
-                <a href="/order/list" class="btn btn-outline-secondary">Quay lại danh sách</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="bg-white p-3 rounded shadow-sm h-100 border-start border-4 border-primary">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">Địa chỉ nhận hàng</h6>
+                    <p class="mb-1 fw-bold fs-5" th:text="${order.account.fullname}"></p>
+                    <p class="mb-2 text-muted small"><i class="fas fa-envelope me-2"></i><span th:text="${order.account.email}"></span></p>
+                    <div class="alert alert-light border small">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        <span th:text="${order.address}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 mb-4">
+                <div class="bg-white p-3 rounded shadow-sm">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">Danh sách sản phẩm</h6>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <tbody>
+                            <tr th:each="d : ${order.orderDetails}">
+                                <td width="70">
+                                    <img th:src="@{|${d.product.image}|}" width="60" height="60" class="rounded border object-fit-cover">
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark" th:text="${d.product.name}"></div>
+                                    <small class="text-muted bg-light px-2 py-1 rounded border">
+                                        Size: <span th:text="${d.size}"></span> | Màu: <span th:text="${d.color}"></span>
+                                    </small>
+                                </td>
+                                <td class="text-end">
+                                    <div class="text-muted small" th:text="${#numbers.formatCurrency(d.price)} + ' x ' + ${d.quantity}"></div>
+                                    <div class="fw-bold text-danger" th:text="${#numbers.formatCurrency(d.price * d.quantity)}"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot class="bg-light">
+                            <tr>
+                                <td colspan="2" class="text-end fw-bold">Thành tiền:</td>
+                                <td class="text-end fw-bold text-danger fs-5">
+                                    <span th:text="${#numbers.formatCurrency(#aggregates.sum(order.orderDetails.![price * quantity]))}"></span>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div class="text-end mt-3">
+                        <a th:if="${order.status == 4}"
+                           th:href="@{|/order/confirm-receipt/${order.id}|}"
+                           class="btn btn-success fw-bold px-4 py-2 shadow-sm animate__animated animate__pulse animate__infinite">
+                            <i class="fas fa-check-circle me-2"></i> XÁC NHẬN ĐÃ NHẬN HÀNG
+                        </a>
+
+                        <a th:if="${order.status == 0}"
+                           th:href="@{|/order/cancel/${order.id}|}"
+                           onclick="return confirm('Bạn chắc chắn muốn hủy đơn hàng này?')"
+                           class="btn btn-outline-danger">Hủy đơn hàng</a>
+
+                        <a th:if="${order.status == 2 || order.status == 3}" href="/" class="btn btn-primary">Mua lại</a>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

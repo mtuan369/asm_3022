@@ -23,6 +23,14 @@ public class OrderDetail implements Serializable {
     Double price;
     Integer quantity;
 
+    // --- [MỚI] THÊM 2 TRƯỜNG NÀY ĐỂ LƯU SIZE & MÀU ---
+    @Column(name = "Size")
+    String size;
+
+    @Column(name = "Color")
+    String color;
+    // -------------------------------------------------
+
     @ManyToOne
     @JoinColumn(name = "Productid")
     Product product;

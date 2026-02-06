@@ -1,6 +1,6 @@
 package com.example.asm.controller.admin;
 
-import com.example.asm.dao.ReportDAO;
+import com.example.asm.dao.ProductDAO;
 import com.example.asm.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ import java.util.List;
 @Controller
 public class ReportAController {
     @Autowired
-    ReportDAO dao;
+    ProductDAO dao;
 
     @RequestMapping("/admin/report/inventory")
     public String inventory(Model model) {

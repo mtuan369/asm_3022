@@ -1,32 +1,120 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card">
-            <div class="card-header bg-dark text-white">QUẢN LÝ ĐƠN HÀNG</div>
-            <div class="card-body">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-light">
+        <div class="mb-4 bg-light p-3 rounded d-flex justify-content-between align-items-center border">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="/admin/index" class="text-decoration-none fw-bold">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Quản lý Đơn hàng</li>
+                </ol>
+            </nav>
+            <a href="/admin/index" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
+        </div>
+
+        <div class="bg-white rounded shadow-sm overflow-hidden">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold m-0"><i class="fas fa-shipping-fast me-2 text-primary"></i>Quản Lý Đơn Hàng</h5>
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control form-control-sm" placeholder="Tìm mã đơn...">
+                    <button class="btn btn-outline-secondary btn-sm"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary small text-uppercase">
                     <tr>
-                        <th>Mã ĐH</th>
+                        <th class="ps-4">Mã ĐH</th>
                         <th>Khách hàng</th>
                         <th>Ngày đặt</th>
-                        <th>Địa chỉ</th>
-                        <th>Thao tác</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái hiện tại</th>
+                        <th class="text-center">Xử lý đơn hàng</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="o : ${items}">
-                        <td th:text="${o.id}"></td>
-                        <td th:text="${o.account.fullname}"></td>
-                        <td th:text="${#dates.format(o.createDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${o.address}"></td>
+                        <td class="ps-4 fw-bold text-dark">#<span th:text="${o.id}"></span></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold me-2"
+                                     style="width: 35px; height: 35px;">
+                                    <span th:text="${#strings.substring(o.account.fullname,0,1)}"></span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold small" th:text="${o.account.fullname}"></span>
+                                    <span class="text-muted" style="font-size: 11px;" th:text="${o.address}"></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${#dates.format(o.createDate, 'dd/MM/yyyy HH:mm')}"></td>
+
+                        <td class="fw-bold text-danger">
+                            <span th:text="${#lists.size(o.orderDetails) + ' sản phẩm'}"></span>
+                        </td>
+
+                        <td>
+                            <span th:if="${o.status == 0}" class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i> Chờ xác nhận</span>
+                            <span th:if="${o.status == 1}" class="badge bg-primary"><i class="fas fa-truck me-1"></i> Đang giao hàng</span>
+
+                            <span th:if="${o.status == 4}" class="badge bg-info text-dark"><i class="fas fa-user-check me-1"></i> Chờ khách xác nhận</span>
+
+                            <span th:if="${o.status == 2}" class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Hoàn tất</span>
+                            <span th:if="${o.status == 3}" class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Đã hủy</span>
+                        </td>
+
                         <td class="text-center">
-                            <a th:href="@{|/order/detail/${o.id}|}" class="btn btn-sm btn-info me-1">Xem</a>
-                            <a th:href="@{|/admin/orders/delete/${o.id}|}" class="btn btn-sm btn-danger"
-                               onclick="return confirm('Bạn có chắc muốn xóa đơn hàng này?');">Xóa</a>
+                            <div class="btn-group">
+                                <a th:href="@{|/order/detail/${o.id}|}" class="btn btn-sm btn-outline-secondary" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+
+                                <ul class="dropdown-menu shadow border-0">
+                                    <li><h6 class="dropdown-header text-uppercase small fw-bold">Cập nhật trạng thái</h6></li>
+
+                                    <li th:if="${o.status == 0}">
+                                        <a class="dropdown-item text-primary fw-bold" th:href="@{|/admin/orders/update-status/${o.id}/1|}">
+                                            <i class="fas fa-box-open me-2"></i> Xác nhận & Giao
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${o.status == 1}">
+                                        <a class="dropdown-item text-info fw-bold" th:href="@{|/admin/orders/update-status/${o.id}/4|}">
+                                            <i class="fas fa-check-circle me-2"></i> Báo đã giao hàng
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${o.status == 0 || o.status == 1}">
+                                        <hr class="dropdown-divider">
+                                        <a class="dropdown-item text-danger" th:href="@{|/admin/orders/update-status/${o.id}/3|}"
+                                           onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')">
+                                            <i class="fas fa-ban me-2"></i> Hủy đơn hàng
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${o.status == 2 || o.status == 3 || o.status == 4}">
+                                        <a class="dropdown-item disabled text-muted" href="#">Đang chờ/Hoàn tất</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="p-3 text-center border-top bg-light small text-muted">
+                Dữ liệu được cập nhật theo thời gian thực
             </div>
         </div>
     </main>

@@ -1,145 +1,106 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card mb-4 border-0 shadow-sm">
-            <div class="card-header bg-white text-dark fw-bold border-bottom text-uppercase">
-                <i class="fas fa-user-cog text-warning me-2"></i> Quản Lý Tài Khoản
-            </div>
-            <div class="card-body">
-                <form th:object="${item}" method="post">
-                    <div class="row">
-                        <div class="col-md-3 text-center">
-                            <div class="mb-3">
-                                <img th:src="*{photo}"
-                                     id="previewImage"
-                                     class="img-thumbnail rounded-circle shadow-sm"
-                                     style="width: 150px; height: 150px; object-fit: cover;"
-                                     onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-muted">Link Ảnh / Tên file</label>
-                                <input th:field="*{photo}" class="form-control form-control-sm"
-                                       placeholder="Dán link ảnh online vào đây..."
-                                       onchange="document.getElementById('previewImage').src = this.value">
-                            </div>
-                        </div>
-
-                        <div class="col-md-9">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold">Tên đăng nhập (Username)</label>
-                                    <input th:field="*{username}" class="form-control" placeholder="Nhập username..."
-                                           th:readonly="${item.username != null}">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold">Mật khẩu</label>
-                                    <input th:field="*{password}" type="password" class="form-control" placeholder="Nhập mật khẩu...">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold">Họ và tên</label>
-                                    <input th:field="*{fullname}" class="form-control" placeholder="Nhập họ tên...">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold">Email</label>
-                                    <input th:field="*{email}" type="email" class="form-control" placeholder="example@gmail.com">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold d-block text-muted">Vai trò</label>
-                                    <div class="form-check form-check-inline">
-                                        <input th:field="*{admin}" class="form-check-input" type="radio" value="true" id="roleAdmin">
-                                        <label class="form-check-label text-danger fw-bold" for="roleAdmin">Admin</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input th:field="*{admin}" class="form-check-input" type="radio" value="false" id="roleUser">
-                                        <label class="form-check-label text-primary" for="roleUser">Khách hàng</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="fw-bold d-block text-muted">Trạng thái</label>
-                                    <div class="form-check form-check-inline">
-                                        <input th:field="*{activated}" class="form-check-input" type="radio" value="true" id="statusActive">
-                                        <label class="form-check-label text-success" for="statusActive">Hoạt động</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input th:field="*{activated}" class="form-check-input" type="radio" value="false" id="statusInactive">
-                                        <label class="form-check-label text-muted" for="statusInactive">Khóa</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-3 pt-3 border-top">
-                                <button formaction="/admin/accounts/create" class="btn btn-warning text-white fw-bold">
-                                    <i class="fas fa-plus"></i> Thêm mới
-                                </button>
-                                <button formaction="/admin/accounts/update" class="btn btn-success fw-bold">
-                                    <i class="fas fa-save"></i> Cập nhật
-                                </button>
-                                <a href="/admin/accounts/delete"
-                                   th:attr="onclick='if(!confirm(\'Bạn có chắc chắn muốn xóa?\')) return false;'"
-                                   th:href="@{|/admin/accounts/delete/${item.username}|}"
-                                   class="btn btn-danger fw-bold"
-                                   th:if="${item.username != null}">
-                                    <i class="fas fa-trash"></i> Xóa
-                                </a>
-                                <a href="/admin/accounts/index" class="btn btn-secondary">
-                                    <i class="fas fa-redo"></i> Làm mới
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <div class="mb-4 bg-light p-3 rounded d-flex justify-content-between align-items-center border">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="/admin/index" class="text-decoration-none fw-bold">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Quản lý Tài khoản</li>
+                </ol>
+            </nav>
+            <a href="/admin/index" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Quay lại
+            </a>
         </div>
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-dark text-white fw-bold">
-                <i class="fas fa-users"></i> DANH SÁCH NGƯỜI DÙNG
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="bg-white p-4 rounded shadow-sm">
+                    <h5 class="fw-bold mb-3">Quản lý User</h5>
+                    <form th:object="${item}" method="post">
+                        <div class="mb-2">
+                            <label class="small fw-bold">Username</label>
+                            <input th:field="*{username}" class="form-control" th:readonly="${item.username != null}">
+                        </div>
+                        <div class="mb-2">
+                            <label class="small fw-bold">Password</label>
+                            <input th:field="*{password}" type="password" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label class="small fw-bold">Fullname</label>
+                            <input th:field="*{fullname}" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label class="small fw-bold">Email</label>
+                            <input th:field="*{email}" class="form-control">
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <label class="d-block small fw-bold">Vai trò</label>
+                                <div class="form-check">
+                                    <input th:field="*{admin}" class="form-check-input" type="radio" value="true" id="admin">
+                                    <label class="form-check-label" for="admin">Admin</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{admin}" class="form-check-input" type="radio" value="false" id="user">
+                                    <label class="form-check-label" for="user">User</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="d-block small fw-bold">Trạng thái</label>
+                                <div class="form-check">
+                                    <input th:field="*{activated}" class="form-check-input" type="radio" value="true" id="active">
+                                    <label class="form-check-label" for="active">Active</label>
+                                </div>
+                                <div class="form-check">
+                                    <input th:field="*{activated}" class="form-check-input" type="radio" value="false" id="lock">
+                                    <label class="form-check-label" for="lock">Locked</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 border-top pt-3">
+                            <button formaction="/admin/accounts/create" class="btn btn-primary w-100 mb-2">Thêm mới</button>
+                            <button formaction="/admin/accounts/update" class="btn btn-success w-100 mb-2">Cập nhật</button>
+                            <a href="/admin/accounts/index" class="btn btn-light w-100 border">Làm mới</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body p-0">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                    <tr>
-                        <th class="text-center">Avatar</th>
-                        <th>Username</th>
-                        <th>Họ và tên</th>
-                        <th>Email</th>
-                        <th>Vai trò</th>
-                        <th>Trạng thái</th>
-                        <th class="text-center">Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="acc : ${items}">
-                        <td class="text-center">
-                            <img th:src="${acc.photo}"
-                                 style="width: 40px; height: 40px; object-fit: cover;"
-                                 class="rounded-circle border"
-                                 onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
-                        </td>
-                        <td th:text="${acc.username}" class="fw-bold"></td>
-                        <td th:text="${acc.fullname}"></td>
-                        <td th:text="${acc.email}"></td>
-                        <td>
-                            <span th:if="${acc.admin}" class="badge bg-danger">Quản trị</span>
-                            <span th:unless="${acc.admin}" class="badge bg-primary">Khách</span>
-                        </td>
-                        <td>
-                            <span th:if="${acc.activated}" class="badge bg-success">Active</span>
-                            <span th:unless="${acc.activated}" class="badge bg-secondary">Locked</span>
-                        </td>
-                        <td class="text-center">
-                            <a th:href="@{|/admin/accounts/edit/${acc.username}|}" class="btn btn-sm btn-outline-warning border-0">
-                                <i class="fas fa-edit fa-lg"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+            <div class="col-md-8">
+                <div class="bg-white rounded shadow-sm overflow-hidden">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                        <tr>
+                            <th class="ps-3">Username</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="acc : ${items}">
+                            <td class="ps-3 fw-bold" th:text="${acc.username}"></td>
+                            <td th:text="${acc.fullname}"></td>
+                            <td th:text="${acc.email}" class="small text-muted"></td>
+                            <td>
+                                <span th:if="${acc.admin}" class="badge bg-danger">ADMIN</span>
+                                <span th:unless="${acc.admin}" class="badge bg-info">USER</span>
+                            </td>
+                            <td class="text-end pe-3">
+                                <a th:href="@{|/admin/accounts/edit/${acc.username}|}" class="btn btn-sm btn-light border"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{|/admin/accounts/delete/${acc.username}|}" class="btn btn-sm btn-light border text-danger" onclick="return confirm('Xóa user này?')"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

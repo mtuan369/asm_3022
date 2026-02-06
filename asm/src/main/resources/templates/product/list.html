@@ -1,48 +1,146 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h4 class="fw-bold text-uppercase mt-2">Danh sách sản phẩm</h4>
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="bg-white p-3 rounded shadow-sm">
+                    <h6 class="fw-bold text-uppercase border-bottom pb-2 mb-3">Bộ Lọc Tìm Kiếm</h6>
+
+                    <form action="/product/list" method="get">
+                        <label class="form-label small fw-bold text-muted">Khoảng giá</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <input type="number" name="min" class="form-control form-control-sm" placeholder="Từ" value="0" min="0">
+                            <span class="mx-1">-</span>
+                            <input type="number" name="max" class="form-control form-control-sm" placeholder="Đến" value="10000">
+                        </div>
+                        <button class="btn btn-primary btn-sm w-100 fw-bold">ÁP DỤNG</button>
+                    </form>
+
+                    <div class="mt-4">
+                        <h6 class="fw-bold text-uppercase border-bottom pb-2 mb-3">Danh mục</h6>
+                        <div class="list-group list-group-flush">
+                            <a th:each="c : ${cates}" th:href="@{|/product/list?cid=${c.id}|}"
+                               class="list-group-item list-group-item-action small border-0 px-0">
+                                <i class="fas fa-caret-right me-2 text-secondary"></i> <span th:text="${c.name}"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col" th:each="p : ${items}" data-aos="fade-up" data-aos-duration="1000">
-                        <div class="card h-100 product-card">
-                            <div class="position-relative overflow-hidden">
-                                <img th:src="${p.image}" class="card-img-top p-3"
-                                     alt="Product Image" style="height: 250px; object-fit: contain;">
-                                <div class="position-absolute top-0 end-0 p-2">
-                                    <span class="badge bg-danger" th:text="'-' + 10 + '%'"></span>
+
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <h5 class="fw-bold text-uppercase m-0 text-dark">
+                        Danh sách sản phẩm
+                        <span class="text-muted small fw-normal ms-2"
+                              th:text="'(Trang ' + ${items.number + 1} + ' / ' + ${items.totalPages} + ')'"></span>
+                    </h5>
+                </div>
+
+                <div class="row row-cols-2 row-cols-md-3 g-3">
+                    <div class="col" th:each="p : ${items.content}" data-aos="fade-up" data-aos-duration="800">
+                        <div class="product-card h-100">
+                            <div class="product-img-frame">
+                                <img th:src="${p.image}" alt="SP" onerror="this.src='https://placehold.co/600x600/eee/999?text=J5+Shop';">
+                                <span class="position-absolute top-0 start-0 m-2 badge bg-danger rounded-1">-15%</span>
+
+                                <div class="action-buttons">
+                                    <a th:href="@{|/cart/add/${p.id}|}" class="btn btn-primary btn-sm rounded-circle shadow-sm" title="Thêm vào giỏ">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </a>
+                                    <a th:href="@{|/favorite/toggle/${p.id}|}" class="btn btn-danger btn-sm rounded-circle shadow-sm text-white" title="Yêu thích">
+                                        <i class="fas fa-heart"></i>
+                                    </a>
+                                    <a th:href="@{|/product/detail/${p.id}|}" class="btn btn-warning btn-sm rounded-circle shadow-sm text-white" title="Chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button class="btn btn-info btn-sm rounded-circle shadow-sm text-white" th:attr="onclick=|openShareModal('${p.id}')|">
+                                        <i class="fas fa-share"></i>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="card-body text-center">
-                                <h5 class="card-title text-truncate">
-                                    <a th:href="@{|/product/detail/${p.id}|}" class="text-decoration-none text-dark" th:text="${p.name}">Product Name</a>
-                                </h5>
-                                <div class="mb-2">
-                                    <span class="text-danger fw-bold fs-5" th:text="${#numbers.formatCurrency(p.price)}">$0.00</span>
-                                    <span class="text-muted text-decoration-line-through small ms-2"
-                                          th:text="${#numbers.formatCurrency(p.price * 1.1)}"></span>
+                            <div class="card-body p-2">
+                                <a th:href="@{|/product/detail/${p.id}|}" class="product-name fw-bold text-dark text-decoration-none"
+                                   style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 40px;"
+                                   th:text="${p.name}">Tên SP</a>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="text-danger fw-bold" th:text="${#numbers.formatCurrency(p.price)}"></span>
+                                    <small class="text-muted text-decoration-line-through" style="font-size: 0.8rem;">$999</small>
                                 </div>
-                            </div>
-
-                            <div class="card-footer bg-white border-0 text-center pb-3">
-                                <a th:href="@{|/cart/add/${p.id}|}" class="btn btn-warning w-100 mb-2 shadow-sm">
-                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
-                                </a>
-                                <a th:href="@{|/product/detail/${p.id}|}" class="btn btn-outline-info w-100">
-                                    <i class="fas fa-eye"></i> Xem chi tiết
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div th:if="${items.size() == 0}" class="alert alert-warning text-center mt-3">
-                    Không tìm thấy sản phẩm nào trong danh mục này!
+                <div class="row mt-5" th:if="${items.totalPages > 1}">
+                    <div class="col-12 d-flex justify-content-center">
+                        <nav>
+                            <ul class="pagination shadow-sm">
+                                <li class="page-item" th:classappend="${items.first ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                       th:href="@{/product/list(p=0, cid=${param.cid}, keywords=${param.keywords}, min=${param.min}, max=${param.max})}">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+
+                                <li class="page-item" th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}"
+                                    th:classappend="${i == items.number ? 'active' : ''}">
+                                    <a class="page-link"
+                                       th:href="@{/product/list(p=${i}, cid=${param.cid}, keywords=${param.keywords}, min=${param.min}, max=${param.max})}"
+                                       th:text="${i + 1}">1</a>
+                                </li>
+
+                                <li class="page-item" th:classappend="${items.last ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                       th:href="@{/product/list(p=${items.totalPages - 1}, cid=${param.cid}, keywords=${param.keywords}, min=${param.min}, max=${param.max})}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="shareModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header text-white" style="background: #3E2723;">
+                        <h5 class="modal-title"><i class="fas fa-envelope me-2"></i>Chia sẻ sản phẩm</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="shareProductId">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="friendEmail" placeholder="name@example.com">
+                            <label for="friendEmail">Email người nhận</label>
+                        </div>
+                        <button type="button" class="btn w-100 text-white fw-bold py-2" style="background: #BC6C25;" onclick="sendShareEmail()">
+                            <i class="fas fa-paper-plane me-2"></i> Gửi Ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openShareModal(id) {
+                document.getElementById('shareProductId').value = id;
+                var myModal = new bootstrap.Modal(document.getElementById('shareModal'));
+                myModal.show();
+            }
+            function sendShareEmail() {
+                // Giả lập gửi mail
+                var email = document.getElementById('friendEmail').value;
+                if(email) {
+                    bootstrap.Modal.getInstance(document.getElementById('shareModal')).hide();
+                    // Bạn có thể dùng SweetAlert nếu đã tích hợp: Swal.fire('Thành công', 'Đã gửi mail!', 'success');
+                    alert("Đã gửi email chia sẻ đến " + email + " thành công!");
+                } else {
+                    alert("Vui lòng nhập email!");
+                }
+            }
+        </script>
     </main>
 </div>

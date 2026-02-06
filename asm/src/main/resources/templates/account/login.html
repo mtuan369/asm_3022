@@ -1,21 +1,52 @@
-<div xmlns:th="http://www.thymeleaf.org"
-     th:replace="~{/layout/index :: dynamic(~{::main})}">
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card mx-auto" style="max-width: 500px;">
-            <div class="card-header bg-info text-white">ĐĂNG NHẬP</div>
-            <div class="card-body">
-                <div th:if="${message}" class="alert alert-warning" th:text="${message}"></div>
-                <form action="/auth/login" method="post">
-                    <div class="mb-3">
-                        <label>Username</label>
-                        <input name="username" class="form-control" value="user">
+        <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+            <div class="col-md-5">
+                <div class="bg-white p-5 rounded shadow-sm text-center">
+                    <h4 class="fw-bold text-dark mb-1">ĐĂNG NHẬP</h4>
+                    <p class="text-muted small mb-4">Chào mừng bạn quay trở lại J5 Shop</p>
+
+                    <div th:if="${message}" class="alert alert-success py-2 small" th:text="${message}"></div>
+                    <div th:if="${error}" class="alert alert-danger py-2 small" th:text="${error}"></div>
+
+                    <form action="/auth/login" method="post" class="text-start">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Tên đăng nhập</label>
+                            <input name="username" class="form-control bg-light border-0 py-2" placeholder="Nhập username..." value="user">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Mật khẩu</label>
+                            <input name="password" type="password" class="form-control bg-light border-0 py-2" placeholder="Nhập mật khẩu..." value="123">
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3 small">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="remember">
+                                <label class="form-check-label text-muted" for="remember">Ghi nhớ</label>
+                            </div>
+                            <a href="/account/forgot-password" class="text-decoration-none text-primary fw-bold">Quên mật khẩu?</a>
+                        </div>
+
+                        <button class="btn btn-primary w-100 py-2 fw-bold mb-3">ĐĂNG NHẬP</button>
+                    </form>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <hr class="flex-grow-1"> <span class="mx-2 small text-muted">Hoặc</span> <hr class="flex-grow-1">
                     </div>
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input name="password" type="password" class="form-control" value="123">
+
+                    <div class="d-flex gap-2">
+                        <a href="#" onclick="alert('Tính năng Facebook đang phát triển!')" class="btn btn-outline-secondary flex-grow-1 text-decoration-none">
+                            <i class="fab fa-facebook text-primary"></i> Facebook
+                        </a>
+                        <a href="#" onclick="alert('Tính năng Google đang phát triển!')" class="btn btn-outline-secondary flex-grow-1 text-decoration-none">
+                            <i class="fab fa-google text-danger"></i> Google
+                        </a>
                     </div>
-                    <button class="btn btn-primary">Đăng nhập</button>
-                </form>
+
+                    <div class="mt-4 small">
+                        Bạn chưa có tài khoản? <a href="/account/sign-up" class="fw-bold text-primary">Đăng ký ngay</a>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

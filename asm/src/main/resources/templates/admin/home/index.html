@@ -1,0 +1,102 @@
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
+    <main>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-uppercase text-dark m-0">Dashboard Quản Trị</h4>
+            <span class="badge bg-light text-dark border p-2">Hôm nay: <span th:text="${#dates.format(new java.util.Date(), 'dd/MM/yyyy')}"></span></span>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card text-white border-0 shadow-sm" style="background: linear-gradient(45deg, #FF512F, #DD2476);">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase opacity-75 small fw-bold">Doanh Thu</h6>
+                                <h3 class="fw-bold mb-0">$50,000</h3>
+                            </div>
+                            <i class="fas fa-dollar-sign fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white border-0 shadow-sm" style="background: linear-gradient(45deg, #4776E6, #8E54E9);">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase opacity-75 small fw-bold">Đơn Hàng</h6>
+                                <h3 class="fw-bold mb-0">120</h3>
+                            </div>
+                            <i class="fas fa-shopping-bag fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white border-0 shadow-sm" style="background: linear-gradient(45deg, #11998e, #38ef7d);">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase opacity-75 small fw-bold">Sản Phẩm</h6>
+                                <h3 class="fw-bold mb-0">56</h3>
+                            </div>
+                            <i class="fas fa-box-open fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white border-0 shadow-sm" style="background: linear-gradient(45deg, #F2994A, #F2C94C);">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase opacity-75 small fw-bold">Khách Hàng</h6>
+                                <h3 class="fw-bold mb-0">1,203</h3>
+                            </div>
+                            <i class="fas fa-users fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="bg-white rounded shadow-sm p-4 h-100">
+                    <h6 class="fw-bold border-bottom pb-3 mb-3">Lối tắt quản lý</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="/admin/products/index" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2">
+                                <i class="fas fa-box fa-2x"></i> Quản lý Sản phẩm
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="/admin/categories/index" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center gap-2">
+                                <i class="fas fa-list fa-2x"></i> Quản lý Danh mục
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="/admin/accounts/index" class="btn btn-outline-warning w-100 py-3 d-flex flex-column align-items-center gap-2">
+                                <i class="fas fa-user-shield fa-2x"></i> Quản lý Tài khoản
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="/admin/orders/index" class="btn btn-outline-danger w-100 py-3 d-flex flex-column align-items-center gap-2">
+                                <i class="fas fa-shipping-fast fa-2x"></i> Quản lý Đơn hàng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="bg-white rounded shadow-sm p-4 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                    <i class="fas fa-chart-pie fa-4x text-info mb-3 opacity-50"></i>
+                    <h6 class="fw-bold">Báo Cáo Tồn Kho</h6>
+                    <p class="small text-muted">Xem chi tiết tình trạng hàng hóa.</p>
+                    <a href="/admin/report/inventory" class="btn btn-info text-white rounded-pill px-4">Xem báo cáo</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

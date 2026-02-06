@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter; // Quan trọng: Phải import cái này
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter; // Quan trọng: Phải import cái này
+import lombok.Setter;
 
 @SuppressWarnings("serial")
-@Getter // <--- Bắt buộc có để tạo hàm get...
-@Setter // <--- Bắt buộc có để tạo hàm set...
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,6 +30,9 @@ public class Order implements Serializable {
     @Column(name = "Createdate")
     Date createDate = new Date();
 
+    // --- MỚI: Thêm trạng thái đơn hàng ---
+    Integer status = 0;
+
     @ManyToOne
     @JoinColumn(name = "Username")
     Account account;
@@ -37,4 +40,13 @@ public class Order implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "order")
     List<OrderDetail> orderDetails;
+
+    // --- MỚI: Hàm lấy tên trạng thái hiển thị lên View ---
+    public String getStatusName() {
+        if (this.status == 0) return "Chờ xác nhận";
+        if (this.status == 1) return "Đang giao hàng";
+        if (this.status == 2) return "Đã giao";
+        if (this.status == 3) return "Đã hủy";
+        return "Mới";
+    }
 }

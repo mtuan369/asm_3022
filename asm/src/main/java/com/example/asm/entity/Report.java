@@ -1,15 +1,10 @@
 package com.example.asm.entity;
 
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Report implements Serializable {
-    private Serializable group; // Nhóm (Category)
-    private Double sum;         // Tổng doanh thu
-    private Long count;         // Số lượng bán ra
+// Interface Projection (Không dùng @Data, Không dùng Class)
+public interface Report {
+    Serializable getGroup(); // Hàm này sẽ hứng dữ liệu Category
+    Double getSum();         // Hứng tổng tiền
+    Long getCount();         // Hứng số lượng
 }

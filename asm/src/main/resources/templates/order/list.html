@@ -1,28 +1,64 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card">
-            <div class="card-header bg-info text-white">LỊCH SỬ ĐƠN HÀNG</div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Mã ĐH</th>
-                        <th>Ngày đặt</th>
-                        <th>Địa chỉ</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="o : ${orders}">
-                        <td th:text="${o.id}"></td>
-                        <td th:text="${#dates.format(o.createDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${o.address}"></td>
-                        <td>
-                            <a th:href="@{|/order/detail/${o.id}|}" class="btn btn-sm btn-primary">Xem chi tiết</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+        <h4 class="fw-bold mb-4 text-dark"><i class="fas fa-file-invoice-dollar me-2 text-warning"></i>Đơn Hàng Của Tôi</h4>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div th:each="o : ${orders}" class="bg-white rounded shadow-sm p-3 mb-3 border-start border-4"
+                     th:classappend="${o.status == 0 ? 'border-warning' : (o.status == 1 ? 'border-primary' : (o.status == 2 ? 'border-success' : (o.status == 4 ? 'border-info' : 'border-danger')))}">
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <div>
+                            <span class="fw-bold text-dark">Đơn hàng #<span th:text="${o.id}"></span></span>
+                            <span class="mx-2 text-muted">|</span>
+                            <small class="text-muted" th:text="${#dates.format(o.createDate, 'dd-MM-yyyy HH:mm')}"></small>
+                        </div>
+
+                        <div>
+                            <span th:if="${o.status == 0}" class="badge bg-warning text-dark">Chờ xác nhận</span>
+                            <span th:if="${o.status == 1}" class="badge bg-primary">Đang giao</span>
+                            <span th:if="${o.status == 4}" class="badge bg-info text-dark">Vui lòng xác nhận</span>
+                            <span th:if="${o.status == 2}" class="badge bg-success">Giao thành công</span>
+                            <span th:if="${o.status == 3}" class="badge bg-danger">Đã hủy</span>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <p class="mb-1 small text-truncate"><i class="fas fa-map-marker-alt text-danger me-2"></i><span th:text="${o.address}"></span></p>
+                            <small class="text-muted" th:text="${#lists.size(o.orderDetails) + ' sản phẩm'}"></small>
+                        </div>
+
+                        <div class="col-md-5 text-end">
+                            <a th:href="@{|/order/detail/${o.id}|}" class="btn btn-outline-secondary btn-sm">
+                                Xem chi tiết
+                            </a>
+
+                            <a th:if="${o.status == 0}"
+                               th:href="@{|/order/cancel/${o.id}|}"
+                               onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác.')"
+                               class="btn btn-danger btn-sm ms-2">
+                                <i class="fas fa-times"></i> Hủy đơn
+                            </a>
+
+                            <a th:if="${o.status == 4}"
+                               th:href="@{|/order/confirm-receipt/${o.id}|}"
+                               class="btn btn-success btn-sm ms-2 fw-bold text-white shadow-sm">
+                                <i class="fas fa-check me-1"></i> Đã nhận được hàng
+                            </a>
+
+                            <a th:if="${o.status == 2 || o.status == 3}" href="/" class="btn btn-primary btn-sm ms-2">
+                                Mua lại
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(orders)}" class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4076/4076432.png" width="100" class="opacity-50 mb-3">
+                    <p class="text-muted">Bạn chưa có đơn hàng nào.</p>
+                    <a href="/" class="btn btn-primary">Mua sắm ngay</a>
+                </div>
             </div>
         </div>
     </main>

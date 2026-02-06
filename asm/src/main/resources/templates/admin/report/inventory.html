@@ -1,28 +1,106 @@
-<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
-    <main>
-        <div class="card">
-            <div class="card-header bg-success text-white fw-bold">THỐNG KÊ DOANH THU THEO LOẠI</div>
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead class="bg-light">
-                    <tr>
-                        <th>Loại hàng</th>
-                        <th>Tổng doanh thu</th>
-                        <th>Số lượng bán ra</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="item : ${items}">
-                        <td th:text="${item.group.name}"></td>
-                        <td th:text="${#numbers.formatCurrency(item.sum)}"></td>
-                        <td th:text="${item.count} + ' sản phẩm'"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer text-muted">
-                * Báo cáo được tổng hợp dựa trên dữ liệu sản phẩm hiện có.
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/layout/index :: dynamic(~{::main})}">
+<body>
+<main>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2 text-uppercase fw-bold"><i class="fas fa-chart-pie me-2 text-primary"></i>Thống kê hàng hóa</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-download me-1"></i> Xuất Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Chi tiết từng loại hàng</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-secondary small text-uppercase">
+                            <tr>
+                                <th class="py-3 ps-4">Loại hàng</th>
+                                <th class="py-3 text-end">Tổng giá trị</th>
+                                <th class="py-3 text-center">Số lượng</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="item : ${items}">
+                                <td class="ps-4 fw-bold text-dark">
+                                    <span th:text="${item.group.name}"></span>
+                                </td>
+                                <td class="text-end text-success fw-bold">
+                                    <span th:text="${#numbers.formatCurrency(item.sum)}"></span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-primary rounded-pill px-3" th:text="${item.count}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot class="bg-light fw-bold">
+                            <tr>
+                                <td class="ps-4">TỔNG CỘNG</td>
+                                <td class="text-end text-danger fs-6">
+                                    <span th:text="${#numbers.formatCurrency(#aggregates.sum(items.![sum]))}"></span>
+                                </td>
+                                <td class="text-center fs-6">
+                                    <span th:text="${#aggregates.sum(items.![count])}"></span>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
-</div>
+
+        <div class="col-md-5 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Biểu đồ tỷ lệ hàng hóa</h6>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center" style="min-height: 350px;">
+                    <div id="piechart_3d" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // 1. Lấy dữ liệu từ Server truyền sang (Thymeleaf)
+            var items = [[${items}]];
+
+            // 2. Chuyển đổi dữ liệu sang định dạng Google Chart
+            var dataArray = [['Loại hàng', 'Giá trị']];
+            items.forEach(function(item) {
+                dataArray.push([item.group.name, item.sum]);
+            });
+
+            var data = google.visualization.arrayToDataTable(dataArray);
+
+            // 3. Cấu hình giao diện biểu đồ
+            var options = {
+                title: 'Tỷ lệ giá trị hàng hóa theo danh mục',
+                is3D: true,
+                pieHole: 0.4, // Tạo biểu đồ Donut nếu muốn (xóa dòng này nếu thích tròn đặc)
+                colors: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'],
+                chartArea: {width: '90%', height: '80%'},
+                legend: {position: 'bottom'}
+            };
+
+            // 4. Vẽ biểu đồ
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+            chart.draw(data, options);
+        }
+    </script>
+</main>
+</body>
+</html>

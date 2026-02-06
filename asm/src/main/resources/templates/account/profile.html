@@ -1,37 +1,63 @@
 <div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card mx-auto" style="max-width: 600px;">
-            <div class="card-header bg-warning fw-bold">CẬP NHẬT HỒ SƠ</div>
-            <div class="card-body">
-                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
-                <form action="/account/edit-profile" method="post" enctype="multipart/form-data" th:object="${user}">
-                    <div class="row">
-                        <div class="col-md-4 text-center">
-                            <img th:src="@{|/images/*{photo}|}" class="img-thumbnail mb-2" style="max-width: 100%;">
-                            <input name="photo_file" type="file" class="form-control form-control-sm">
-                            <input th:field="*{photo}" type="hidden">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label>Username:</label>
-                                <input th:field="*{username}" class="form-control" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label>Họ tên:</label>
-                                <input th:field="*{fullname}" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Email:</label>
-                                <input th:field="*{email}" class="form-control">
-                            </div>
-                            <input th:field="*{password}" type="hidden">
-                            <input th:field="*{admin}" type="hidden">
-                            <input th:field="*{activated}" type="hidden">
-
-                            <button class="btn btn-primary mt-3">Cập nhật</button>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="bg-white rounded shadow-sm overflow-hidden">
+                    <div class="p-4 border-bottom bg-light">
+                        <h5 class="fw-bold m-0 text-dark"><i class="fas fa-user-circle me-2 text-primary"></i>Hồ Sơ Của Tôi</h5>
+                        <small class="text-muted">Quản lý thông tin hồ sơ để bảo mật tài khoản</small>
                     </div>
-                </form>
+
+                    <div class="card-body p-4">
+                        <div th:if="${message}" class="alert alert-success d-flex align-items-center mb-4">
+                            <i class="fas fa-check-circle me-2"></i> <span th:text="${message}"></span>
+                        </div>
+
+                        <form action="/account/edit-profile" method="post" enctype="multipart/form-data" th:object="${user}">
+                            <div class="row">
+                                <div class="col-md-4 text-center border-end">
+                                    <div class="mb-3 position-relative d-inline-block">
+                                        <img th:src="@{|/images/*{photo}|}" id="previewImg"
+                                             onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'"
+                                             class="rounded-circle border shadow-sm"
+                                             style="width: 150px; height: 150px; object-fit: cover;">
+
+                                        <label for="photoFile" class="position-absolute bottom-0 end-0 bg-light border rounded-circle p-2 shadow-sm"
+                                               style="cursor: pointer;">
+                                            <i class="fas fa-camera text-dark"></i>
+                                        </label>
+                                    </div>
+                                    <input type="file" name="photo_file" id="photoFile" class="d-none"
+                                           onchange="document.getElementById('previewImg').src = window.URL.createObjectURL(this.files[0])">
+                                    <input th:field="*{photo}" type="hidden">
+
+                                    <div class="small text-muted mt-2">Dụng lượng file tối đa 1 MB<br>Định dạng: .JPEG, .PNG</div>
+                                </div>
+
+                                <div class="col-md-8 ps-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-muted">Tên đăng nhập</label>
+                                        <input th:field="*{username}" class="form-control bg-light" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-muted">Họ và tên</label>
+                                        <input th:field="*{fullname}" class="form-control" placeholder="Nhập họ tên...">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-muted">Email</label>
+                                        <input th:field="*{email}" class="form-control" placeholder="Nhập email...">
+                                    </div>
+
+                                    <input th:field="*{password}" type="hidden">
+                                    <input th:field="*{admin}" type="hidden">
+                                    <input th:field="*{activated}" type="hidden">
+
+                                    <button class="btn btn-primary px-4 mt-3">Lưu Thay Đổi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

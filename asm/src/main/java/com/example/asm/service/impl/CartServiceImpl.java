@@ -17,34 +17,39 @@ public class CartServiceImpl implements CartService {
     @Autowired
     ProductDAO dao;
 
-    // 1. Sửa Key của Map: Long -> Integer
     Map<Integer, Product> map = new HashMap<>();
 
-    // 2. Sửa tham số Long -> Integer
     @Override
-    public void add(Integer id) {
+    public void add(Integer id, String size, String color) {
         Product p = map.get(id);
         if (p == null) {
+            // Nếu chưa có trong giỏ: Lấy từ DB và set thông tin mới
             p = dao.findById(id).get();
             p.setQuantity(1);
+            p.setSize(size != null ? size : "");
+            p.setColor(color != null ? color : "");
             map.put(id, p);
         } else {
+            // Nếu đã có: Tăng số lượng
             p.setQuantity(p.getQuantity() + 1);
+
+            // Cập nhật lại size/màu mới nhất khách vừa chọn (Optional)
+            if (size != null && !size.isEmpty()) p.setSize(size);
+            if (color != null && !color.isEmpty()) p.setColor(color);
         }
     }
 
-    // 3. Sửa tham số Long -> Integer
     @Override
     public void remove(Integer id) {
         map.remove(id);
     }
 
-    // 4. Sửa tham số Long -> Integer
     @Override
-    public Product update(Integer id, int qty) {
+    public void update(Integer id, Integer qty) {
         Product p = map.get(id);
-        p.setQuantity(qty);
-        return p;
+        if (p != null) {
+            p.setQuantity(qty);
+        }
     }
 
     @Override
@@ -60,14 +65,14 @@ public class CartServiceImpl implements CartService {
     @Override
     public int getCount() {
         return map.values().stream()
-                .mapToInt(item -> item.getQuantity())
+                .mapToInt(Product::getQuantity)
                 .sum();
     }
 
     @Override
     public double getAmount() {
         return map.values().stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .mapToDouble(p -> p.getPrice() * p.getQuantity())
                 .sum();
     }
 }

@@ -1,40 +1,159 @@
-<div xmlns:th="http://www.thymeleaf.org"
-     th:replace="~{/layout/index :: dynamic(~{::main})}">
-
+<div xmlns:th="http://www.thymeleaf.org" th:replace="~{/layout/index :: dynamic(~{::main})}">
     <main>
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white text-dark fw-bold text-uppercase border-bottom">
-                <i class="fas fa-star text-warning"></i> SẢN PHẨM NỔI BẬT
-            </div>
-            <div class="card-body">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col" th:each="p : ${items}">
-                        <div class="card h-100 product-card border-0 shadow-sm">
-
-                            <img th:src="${p.image}"
-                                 class="card-img-top"
-                                 alt="Ảnh sản phẩm"
-                                 style="height: 250px; object-fit: contain; padding: 10px;">
-
-                            <div class="card-body text-center">
-                                <h5 class="card-title">
-                                    <a th:href="@{|/product/detail/${p.id}|}" th:text="${p.name}" class="text-decoration-none text-dark"></a>
-                                </h5>
-                                <p class="card-text text-danger fw-bold fs-5" th:text="${#numbers.formatCurrency(p.price)}">$Price</p>
+        <div class="hero-section">
+            <div class="row g-2">
+                <div class="col-lg-8">
+                    <div id="mainCarousel" class="carousel slide hero-slider" data-bs-ride="carousel" data-bs-interval="4000">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+                        </div>
+                        <div class="carousel-inner h-100">
+                            <div class="carousel-item h-100 active">
+                                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop" alt="Banner 1">
                             </div>
-                            <div class="card-footer bg-white border-0 text-center pb-4">
-                                <a th:href="@{|/cart/add/${p.id}|}" class="btn btn-warning text-white px-3 shadow-sm">
-                                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
-                                </a>
-                                <a th:href="@{|/product/detail/${p.id}|}" class="btn btn-outline-secondary px-3 shadow-sm">
-                                    <i class="fas fa-eye"></i> Chi tiết
-                                </a>
+                            <div class="carousel-item h-100">
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop" alt="Banner 2">
                             </div>
+                            <div class="carousel-item h-100">
+                                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" alt="Banner 3">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 d-none d-lg-flex banner-col">
+                    <div class="hero-banner-sm">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop" alt="Thời trang">
+                        <div class="position-absolute top-0 start-0 p-3 text-white" style="background: linear-gradient(to right, rgba(0,0,0,0.5), transparent);">
+                            <h6 class="fw-bold m-0 text-uppercase">Thời Trang</h6>
+                            <small class="opacity-75" style="font-size: 0.75rem;">Bộ sưu tập mới</small>
+                        </div>
+                    </div>
+                    <div class="hero-banner-sm">
+                        <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=600&auto=format&fit=crop" alt="Tech Zone">
+                        <div class="position-absolute bottom-0 start-0 p-3 text-white w-100" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                            <h6 class="fw-bold m-0 text-uppercase">Tech Zone</h6>
+                            <small class="text-warning" style="font-size: 0.75rem;">Giảm 15% thành viên mới</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
 
+        <div class="bg-white p-3 rounded shadow-sm mb-4">
+            <h6 class="text-uppercase fw-bold text-muted border-bottom pb-2 mb-3 small">Danh Mục Hot</h6>
+            <div class="d-flex justify-content-between text-center overflow-auto pb-1">
+                <a href="/product/list?cid=1" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-laptop fa-lg text-primary"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Laptop</span>
+                </a>
+                <a href="/product/list?cid=2" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-mobile-alt fa-lg text-success"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Mobile</span>
+                </a>
+                <a href="/product/list?cid=3" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-camera fa-lg text-warning"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Camera</span>
+                </a>
+                <a href="/product/list?cid=4" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-tshirt fa-lg text-danger"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Fashion</span>
+                </a>
+                <a href="/product/list?cid=5" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-gem fa-lg text-info"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Jewelry</span>
+                </a>
+                <a href="/product/list?cid=6" class="text-decoration-none text-dark d-flex flex-column align-items-center px-3 icon-nav">
+                    <div class="bg-light rounded-circle p-2 mb-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                        <i class="fas fa-clock fa-lg text-secondary"></i>
+                    </div>
+                    <span class="small fw-bold" style="font-size: 0.75rem;">Watches</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-3 bg-white p-2 px-3 rounded shadow-sm border-start border-4 border-danger">
+            <h6 class="text-uppercase fw-bold text-danger m-0">Gợi Ý Hôm Nay</h6>
+            <a href="/product/list" class="ms-auto text-decoration-none fw-bold small text-muted hover-primary" style="font-size: 0.8rem;">
+                Xem tất cả <i class="fas fa-angle-right"></i>
+            </a>
+        </div>
+
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2">
+            <div class="col" th:each="p : ${items}" data-aos="fade-up" data-aos-duration="800">
+                <div class="product-card h-100">
+                    <div class="product-img-frame">
+                        <a th:href="@{|/product/detail/${p.id}|}">
+                            <img th:src="${p.image}" alt="SP" onerror="this.src='https://placehold.co/600x600/eee/999?text=J5+Shop';">
+                        </a>
+                        <div class="position-absolute top-0 end-0 m-2 bg-warning text-dark px-2 py-1 rounded small fw-bold shadow" style="font-size: 0.7rem;">-15%</div>
+
+                        <div class="action-buttons">
+                            <a th:href="@{|/cart/add/${p.id}|}" class="btn btn-primary btn-sm rounded-circle shadow-sm" title="Thêm vào giỏ">
+                                <i class="fas fa-cart-plus"></i>
+                            </a>
+                            <a th:href="@{|/favorite/toggle/${p.id}|}" class="btn btn-danger btn-sm rounded-circle shadow-sm text-white" title="Yêu thích">
+                                <i class="fas fa-heart"></i>
+                            </a>
+                            <a th:href="@{|/product/detail/${p.id}|}" class="btn btn-light btn-sm rounded-circle shadow-sm text-dark" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-2">
+                        <a th:href="@{|/product/detail/${p.id}|}" class="product-name text-dark fw-normal text-decoration-none small"
+                           th:text="${p.name}">Tên SP</a>
+
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="product-price text-danger" style="font-size: 1rem;" th:text="${#numbers.formatCurrency(p.price)}"></span>
+                            <small class="text-muted text-decoration-line-through" style="font-size: 0.7rem;">$999</small>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-1">
+                            <div class="text-warning" style="font-size: 0.7rem;">
+                                <span th:if="${p.avgStars > 0}" th:each="i : ${#numbers.sequence(1, p.avgStars)}">
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span th:if="${p.avgStars < 5}" th:each="i : ${#numbers.sequence(p.avgStars + 1, 5)}">
+                                    <i class="far fa-star"></i>
+                                </span>
+                            </div>
+                            <small class="text-muted ms-1" style="font-size: 0.7rem;"
+                                   th:text="'(' + ${#lists.size(p.reviews)} + ')'"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-4 rounded-3 overflow-hidden shadow-sm position-relative" data-aos="zoom-in">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=80"
+                 class="w-100" style="height: 220px; object-fit: cover; filter: brightness(0.7);">
+
+            <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-100">
+                <h3 class="fw-bold mb-2 text-uppercase">Khuyến Mãi Mùa Hè</h3>
+                <p class="mb-3 opacity-90 small">Giảm giá lên đến 70% cho tất cả các mặt hàng điện tử</p>
+                <a href="/product/list" class="btn btn-warning btn-sm fw-bold rounded-pill px-4 shadow-lg">MUA NGAY</a>
+            </div>
+        </div>
+    </main>
 </div>
